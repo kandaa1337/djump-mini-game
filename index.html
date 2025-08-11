@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Doodle Jump Adventure</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: manipulation;
+            user-select: none;
+        }
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 500px;
+            height: 85vh;
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .score-display {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .parachute-count {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            font-weight: 700;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: auto;
+        }
+        
+        .directional-controls {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .control-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.4);
+        }
+        
+        .jump-btn {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00c853, #009624);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .jump-btn:hover {
+            background: linear-gradient(135deg, #00e676, #00c853);
+            transform: scale(1.05);
+        }
+        
+        .jump-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(135deg, #00b248, #008c22);
+        }
+        
+        .btn-icon {
+            font-size: 30px;
+            color: white;
+        }
+        
+        .menu-screen, .settings-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 20;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .settings-screen {
+            display: none;
+        }
+        
+        .title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+            color: #ffd700;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 80%;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #2196F3, #0D47A1);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: 500;
+            border-radius: 50px;
+            margin: 10px 0;
+            cursor: pointer;
+            width: 80%;
+            max-width: 280px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+        }
+        
+        .btn-settings {
+            background: linear-gradient(135deg, #9C27B0, #6A1B9A);
+        }
+        
+        .btn-exit {
+            background: linear-gradient(135deg, #f44336, #c62828);
+        }
+        
+        .settings-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 80%;
+            max-width: 280px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .game-over {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 15;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .final-score {
+            font-size: 72px;
+            font-weight: 700;
+            color: #ffd700;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .tutorial {
+            position: absolute;
+            bottom: 120px;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 0 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+        
+        .item-notification {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 24px;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 30;
+        }
+        
+        .notification-show {
+            animation: showNotification 2s forwards;
+        }
+        
+        @keyframes showNotification {
+            0% { opacity: 0; top: 50%; }
+            20% { opacity: 1; top: 45%; }
+            80% { opacity: 1; top: 45%; }
+            100% { opacity: 0; top: 40%; }
+        }
+        
+        @media (max-width: 500px) {
+            .title {
+                font-size: 36px;
+            }
+            
+            .control-btn {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .jump-btn {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="ui-overlay">
+            <div class="score-display">
+                <span>🏆</span>
+                <span id="score">0</span>
+            </div>
+            
+            <div class="parachute-count">
+                <span>🪂</span>
+                <span id="parachutes">0</span>
+            </div>
+            
+            <div class="controls">
+                <div class="directional-controls">
+                    <div class="control-btn" id="leftBtn">
+                        <div class="btn-icon">←</div>
+                    </div>
+                    <div class="control-btn" id="rightBtn">
+                        <div class="btn-icon">→</div>
+                    </div>
+                </div>
+                <div class="jump-btn" id="jumpBtn">
+                    <div class="btn-icon">↑</div>
+                </div>
+            </div>
+            
+            <div class="tutorial" id="tutorial">
+                Используйте кнопки или наклон телефона для управления
+            </div>
+        </div>
+        
+        <div class="menu-screen" id="menuScreen">
+            <h1 class="title">Doodle Jump Adventure</h1>
+            <p class="subtitle">Прыгай по платформам, собирай каски и парашюты! Стань лучшим скалолазом!</p>
+            <button class="btn" id="startBtn">НАЧАТЬ ИГРУ</button>
+            <button class="btn btn-settings" id="settingsBtn">НАСТРОЙКИ</button>
+            <button class="btn btn-exit" id="exitBtn">ВЫЙТИ</button>
+        </div>
+        
+        <div class="settings-screen" id="settingsScreen">
+            <h1 class="title">Настройки</h1>
+            
+            <div class="settings-item">
+                <span>Гироскопическое управление</span>
+                <label class="switch">
+                    <input type="checkbox" id="gyroToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="settings-item">
+                <span>Звуковые эффекты</span>
+                <label class="switch">
+                    <input type="checkbox" id="soundToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <button class="btn" id="backBtn">НАЗАД</button>
+        </div>
+        
+        <div class="game-over" id="gameOver">
+            <h1 class="title">Игра окончена!</h1>
+            <div class="final-score" id="finalScore">0</div>
+            <p class="subtitle">Парашютов использовано: <span id="parachutesUsed">0</span></p>
+            <button class="btn" id="restartBtn">ИГРАТЬ СНОВА</button>
+            <button class="btn btn-settings" id="menuBtn">МЕНЮ</button>
+        </div>
+        
+        <div class="item-notification" id="itemNotification"></div>
+    </div>
+
+    <script>
+        // Основные переменные игры
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const parachutesElement = document.getElementById('parachutes');
+        const menuScreen = document.getElementById('menuScreen');
+        const settingsScreen = document.getElementById('settingsScreen');
+        const gameOverScreen = document.getElementById('gameOver');
+        const finalScoreElement = document.getElementById('finalScore');
+        const parachutesUsedElement = document.getElementById('parachutesUsed');
+        const itemNotification = document.getElementById('itemNotification');
+        const tutorialElement = document.getElementById('tutorial');
+        const gyroToggle = document.getElementById('gyroToggle');
+        const soundToggle = document.getElementById('soundToggle');
+        
+        let gameActive = false;
+        let gyroEnabled = false;
+        let soundEnabled = true;
+        let score = 0;
+        let parachutes = 0;
+        let parachutesUsed = 0;
+        let gameSpeed = 3;
+        let highestPoint = 0;
+        let lastSafeHeight = 0;
+        
+        // Установка размеров canvas
+        function setupCanvas() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }
+        
+        // Объект игрока
+        const player = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 150,
+            width: 50,
+            height: 50,
+            velocityX: 0,
+            velocityY: 0,
+            jumpForce: -15,
+            gravity: 0.8,
+            isJumping: false,
+            image: null,
+            
+            init() {
+                this.image = new Image();
+                this.image.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="40" r="20" fill="%23FF6B6B"/><rect x="35" y="60" width="30" height="40" rx="10" fill="%234ECDC4"/><circle cx="40" cy="30" r="4" fill="white"/><circle cx="60" cy="30" r="4" fill="white"/><path d="M45 40 Q50 45 55 40" stroke="white" stroke-width="3" fill="none"/></svg>';
+            },
+            
+            update() {
+                // Применяем гравитацию
+                this.velocityY += this.gravity;
+                
+                // Обновляем позицию
+                this.x += this.velocityX;
+                this.y += this.velocityY;
+                
+                // Ограничение движения по горизонтали
+                if (this.x < 0) this.x = 0;
+                if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
+                
+                // Проверка на выход за нижнюю границу
+                if (this.y > canvas.height) {
+                    if (parachutes > 0) {
+                        parachutes--;
+                        parachutesUsed++;
+                        this.y = lastSafeHeight;
+                        this.velocityY = this.jumpForce * 0.7;
+                        showNotification('Парашют активирован!');
+                    } else {
+                        endGame();
+                    }
+                }
+                
+                // Обновляем последнюю безопасную высоту
+                if (this.y < lastSafeHeight) {
+                    lastSafeHeight = this.y;
+                }
+            },
+            
+            draw() {
+                ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+            },
+            
+            jump() {
+                if (!this.isJumping) {
+                    this.velocityY = this.jumpForce;
+                    this.isJumping = true;
+                }
+            },
+            
+            reset() {
+                this.x = canvas.width / 2 - 25;
+                this.y = canvas.height - 150;
+                this.velocityX = 0;
+                this.velocityY = 0;
+                this.isJumping = false;
+            }
+        };
+        
+        // Платформы
+        const platforms = [];
+        const platformImage = new Image();
+        platformImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30"><rect x="0" y="0" width="100" height="30" rx="5" fill="%23A1887F"/><rect x="5" y="5" width="90" height="20" rx="3" fill="%238D6E63"/></svg>';
+        
+        // Предметы
+        const items = [];
+        const helmetImage = new Image();
+        helmetImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23FFD700"/><circle cx="50" cy="35" r="15" fill="%23FFD700"/><rect x="25" y="35" width="50" height="30" fill="%23FFD700"/></svg>';
+        
+        const parachuteImage = new Image();
+        parachuteImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20,30 Q50,5 80,30 L65,70 Q50,85 35,70 Z" fill="%234FC3F7"/><circle cx="50" cy="75" r="8" fill="%23795548"/><path d="M50,75 L50,95 M45,75 L30,90 M55,75 L70,90" stroke="%23795548" stroke-width="3"/></svg>';
+        
+        // Создание начальных платформ
+        function createInitialPlatforms() {
+            platforms.length = 0;
+            
+            // Стартовая платформа
+            platforms.push({
+                x: canvas.width / 2 - 75,
+                y: canvas.height - 100,
+                width: 150,
+                height: 20
+            });
+            
+            // Генерация остальных платформ
+            for (let i = 0; i < 10; i++) {
+                createPlatform(canvas.height - 150 - i * 80);
+            }
+        }
+        
+        // Создание новой платформы
+        function createPlatform(yPos) {
+            const minWidth = 60;
+            const maxWidth = 150;
+            const width = minWidth + Math.random() * (maxWidth - minWidth);
+            const x = Math.random() * (canvas.width - width);
+            
+            platforms.push({
+                x: x,
+                y: yPos,
+                width: width,
+                height: 20
+            });
+            
+            // Случайное добавление предметов
+            if (Math.random() > 0.7) {
+                createItem(x + width/2 - 15, yPos - 40, Math.random() > 0.5 ? 'helmet' : 'parachute');
+            }
+        }
+        
+        // Создание предмета
+        function createItem(x, y, type) {
+            items.push({
+                x: x,
+                y: y,
+                width: 30,
+                height: 30,
+                type: type
+            });
+        }
+        
+        // Проверка коллизий
+        function checkCollisions() {
+            // Коллизии с платформами
+            for (let i = 0; i < platforms.length; i++) {
+                const p = platforms[i];
+                
+                // Проверка, стоит ли игрок на платформе
+                if (
+                    player.y + player.height <= p.y + 10 &&
+                    player.y + player.height + player.velocityY >= p.y &&
+                    player.x + player.width > p.x &&
+                    player.x < p.x + p.width
+                ) {
+                    player.y = p.y - player.height;
+                    player.velocityY = 0;
+                    player.isJumping = false;
+                }
+            }
+            
+            // Коллизии с предметами
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                
+                if (
+                    player.x < item.x + item.width &&
+                    player.x + player.width > item.x &&
+                    player.y < item.y + item.height &&
+                    player.y + player.height > item.y
+                ) {
+                    if (item.type === 'helmet') {
+                        score += 50;
+                        showNotification('+50 очков!');
+                    } else if (item.type === 'parachute') {
+                        parachutes++;
+                        showNotification('Парашют!');
+                    }
+                    
+                    items.splice(i, 1);
+                }
+            }
+        }
+        
+        // Обновление игры
+        function update() {
+            if (!gameActive) return;
+            
+            player.update();
+            checkCollisions();
+            
+            // Обновление счета (высота)
+            const currentHeight = Math.max(0, canvas.height - player.y);
+            if (currentHeight > highestPoint) {
+                score += Math.floor(currentHeight - highestPoint);
+                highestPoint = currentHeight;
+                scoreElement.textContent = score;
+            }
+            
+            // Перемещение платформ вниз (создает иллюзию подъема)
+            if (player.y < canvas.height / 3) {
+                const diff = canvas.height / 3 - player.y;
+                player.y = canvas.height / 3;
+                
+                // Сдвиг платформ и предметов вниз
+                platforms.forEach(p => p.y += diff);
+                items.forEach(item => item.y += diff);
+                
+                // Увеличение сложности
+                gameSpeed = 3 + Math.floor(score / 1000) * 0.5;
+                
+                // Удаление платформ, ушедших за экран
+                for (let i = platforms.length - 1; i >= 0; i--) {
+                    if (platforms[i].y > canvas.height) {
+                        platforms.splice(i, 1);
+                    }
+                }
+                
+                // Удаление предметов, ушедших за экран
+                for (let i = items.length - 1; i >= 0; i--) {
+                    if (items[i].y > canvas.height) {
+                        items.splice(i, 1);
+                    }
+                }
+                
+                // Создание новых платформ сверху
+                while (platforms.length < 10) {
+                    createPlatform(platforms[0].y - 80 - Math.random() * 50);
+                }
+            }
+        }
+        
+        // Отрисовка игры
+        function draw() {
+            // Очистка экрана
+            ctx.fillStyle = 'rgba(25, 40, 80, 0.2)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Рисуем фон (простые облака)
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            for (let i = 0; i < 5; i++) {
+                const x = (Date.now() / 50 + i * 200) % (canvas.width + 300) - 150;
+                const y = 100 + i * 80;
+                drawCloud(x, y, 80, 40);
+            }
+            
+            // Рисуем платформы
+            platforms.forEach(p => {
+                ctx.drawImage(platformImage, p.x, p.y, p.width, p.height);
+            });
+            
+            // Рисуем предметы
+            items.forEach(item => {
+                const img = item.type === 'helmet' ? helmetImage : parachuteImage;
+                ctx.drawImage(img, item.x, item.y, item.width, item.height);
+            });
+            
+            // Рисуем игрока
+            player.draw();
+        }
+        
+        // Рисуем облако
+        function drawCloud(x, y, width, height) {
+            ctx.beginPath();
+            ctx.arc(x, y, height/2, 0, Math.PI * 2);
+            ctx.arc(x + width/3, y - height/4, height/2.5, 0, Math.PI * 2);
+            ctx.arc(x + width/2, y, height/2.2, 0, Math.PI * 2);
+            ctx.arc(x + width * 2/3, y + height/5, height/3, 0, Math.PI * 2);
+            ctx.arc(x + width, y, height/2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Игровой цикл
+        function gameLoop() {
+            update();
+            draw();
+            
+            if (gameActive) {
+                requestAnimationFrame(gameLoop);
+            }
+        }
+        
+        // Показ уведомления
+        function showNotification(text) {
+            itemNotification.textContent = text;
+            itemNotification.className = 'item-notification notification-show';
+            
+            setTimeout(() => {
+                itemNotification.className = 'item-notification';
+            }, 2000);
+        }
+        
+        // Завершение игры
+        function endGame() {
+            gameActive = false;
+            finalScoreElement.textContent = score;
+            parachutesUsedElement.textContent = parachutesUsed;
+            gameOverScreen.style.display = 'flex';
+        }
+        
+        // Начало новой игры
+        function startGame() {
+            gameActive = true;
+            score = 0;
+            parachutes = 0;
+            parachutesUsed = 0;
+            highestPoint = 0;
+            lastSafeHeight = canvas.height;
+            gameSpeed = 3;
+            
+            scoreElement.textContent = score;
+            parachutesElement.textContent = parachutes;
+            
+            player.reset();
+            createInitialPlatforms();
+            items.length = 0;
+            
+            menuScreen.style.display = 'none';
+            settingsScreen.style.display = 'none';
+            gameOverScreen.style.display = 'none';
+            
+            gameLoop();
+        }
+        
+        // Управление с помощью кнопок
+        document.getElementById('leftBtn').addEventListener('touchstart', () => {
+            player.velocityX = -gameSpeed;
+        });
+        
+        document.getElementById('leftBtn').addEventListener('touchend', () => {
+            player.velocityX = 0;
+        });
+        
+        document.getElementById('rightBtn').addEventListener('touchstart', () => {
+            player.velocityX = gameSpeed;
+        });
+        
+        document.getElementById('rightBtn').addEventListener('touchend', () => {
+            player.velocityX = 0;
+        });
+        
+        document.getElementById('jumpBtn').addEventListener('touchstart', () => {
+            player.jump();
+        });
+        
+        // Управление с помощью гироскопа
+        function handleGyro(e) {
+            if (!gyroEnabled || !gameActive) return;
+            
+            const beta = e.beta; // Наклон вперед-назад
+            const gamma = e.gamma; // Наклон влево-вправо
+            
+            if (gamma < -10) {
+                player.velocityX = -gameSpeed;
+            } else if (gamma > 10) {
+                player.velocityX = gameSpeed;
+            } else {
+                player.velocityX = 0;
+            }
+        }
+        
+        // Настройки
+        gyroToggle.addEventListener('change', () => {
+            gyroEnabled = gyroToggle.checked;
+            tutorialElement.textContent = gyroEnabled ? 
+                "Используйте наклон телефона для управления" : 
+                "Используйте кнопки для управления";
+        });
+        
+        soundToggle.addEventListener('change', () => {
+            soundEnabled = soundToggle.checked;
+        });
+        
+        // Обработчики кнопок меню
+        document.getElementById('startBtn').addEventListener('click', startGame);
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            menuScreen.style.display = 'none';
+            settingsScreen.style.display = 'flex';
+        });
+        document.getElementById('exitBtn').addEventListener('click', () => {
+            // В реальном Mini App здесь будет закрытие приложения
+            alert('Приложение закрыто');
+        });
+        document.getElementById('backBtn').addEventListener('click', () => {
+            settingsScreen.style.display = 'none';
+            menuScreen.style.display = 'flex';
+        });
+        document.getElementById('restartBtn').addEventListener('click', startGame);
+        document.getElementById('menuBtn').addEventListener('click', () => {
+            gameOverScreen.style.display = 'none';
+            menuScreen.style.display = 'flex';
+        });
+        
+        // Инициализация
+        window.addEventListener('load', () => {
+            setupCanvas();
+            player.init();
+            
+            // Проверка поддержки гироскопа
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', handleGyro);
+                gyroToggle.disabled = false;
+            } else {
+                gyroToggle.disabled = true;
+                document.querySelector('.settings-item span').innerHTML += 
+                    '<br><small>(не поддерживается)</small>';
+            }
+            
+            // Запуск мини-анимации на стартовом экране
+            animateTitle();
+        });
+        
+        window.addEventListener('resize', setupCanvas);
+        
+        // Анимация заголовка
+        function animateTitle() {
+            const title = document.querySelector('.title');
+            let hue = 0;
+            
+            function updateTitleColor() {
+                hue = (hue + 1) % 360;
+                title.style.color = `hsl(${hue}, 100%, 60%)`;
+                requestAnimationFrame(updateTitleColor);
+            }
+            
+            updateTitleColor();
+        }
+    </script>
+</body>
+</html>
