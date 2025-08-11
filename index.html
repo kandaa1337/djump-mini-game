@@ -116,6 +116,7 @@
             cursor: pointer;
             transition: all 0.2s;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            pointer-events: auto;
         }
         
         .control-btn:hover {
@@ -141,6 +142,7 @@
             cursor: pointer;
             transition: all 0.2s;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            pointer-events: auto;
         }
         
         .jump-btn:hover {
@@ -457,6 +459,9 @@
         const tutorialElement = document.getElementById('tutorial');
         const gyroToggle = document.getElementById('gyroToggle');
         const soundToggle = document.getElementById('soundToggle');
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+        const jumpBtn = document.getElementById('jumpBtn');
         
         let gameActive = false;
         let gyroEnabled = false;
@@ -467,6 +472,8 @@
         let gameSpeed = 3;
         let highestPoint = 0;
         let lastSafeHeight = 0;
+        let movingLeft = false;
+        let movingRight = false;
         
         // Установка размеров canvas
         function setupCanvas() {
@@ -495,6 +502,11 @@
             update() {
                 // Применяем гравитацию
                 this.velocityY += this.gravity;
+                
+                // Обновление горизонтального движения
+                if (movingLeft) this.velocityX = -gameSpeed;
+                else if (movingRight) this.velocityX = gameSpeed;
+                else this.velocityX = 0;
                 
                 // Обновляем позицию
                 this.x += this.velocityX;
@@ -660,6 +672,7 @@
                 score += Math.floor(currentHeight - highestPoint);
                 highestPoint = currentHeight;
                 scoreElement.textContent = score;
+                parachutesElement.textContent = parachutes;
             }
             
             // Перемещение платформ вниз (создает иллюзию подъема)
@@ -788,25 +801,61 @@
         }
         
         // Управление с помощью кнопок
-        document.getElementById('leftBtn').addEventListener('touchstart', () => {
-            player.velocityX = -gameSpeed;
-        });
-        
-        document.getElementById('leftBtn').addEventListener('touchend', () => {
-            player.velocityX = 0;
-        });
-        
-        document.getElementById('rightBtn').addEventListener('touchstart', () => {
-            player.velocityX = gameSpeed;
-        });
-        
-        document.getElementById('rightBtn').addEventListener('touchend', () => {
-            player.velocityX = 0;
-        });
-        
-        document.getElementById('jumpBtn').addEventListener('touchstart', () => {
-            player.jump();
-        });
+        function setupControls() {
+            // Левая кнопка
+            leftBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                movingLeft = true;
+            });
+            
+            leftBtn.addEventListener('touchend', () => {
+                movingLeft = false;
+            });
+            
+            leftBtn.addEventListener('mousedown', () => {
+                movingLeft = true;
+            });
+            
+            leftBtn.addEventListener('mouseup', () => {
+                movingLeft = false;
+            });
+            
+            leftBtn.addEventListener('mouseleave', () => {
+                movingLeft = false;
+            });
+            
+            // Правая кнопка
+            rightBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                movingRight = true;
+            });
+            
+            rightBtn.addEventListener('touchend', () => {
+                movingRight = false;
+            });
+            
+            rightBtn.addEventListener('mousedown', () => {
+                movingRight = true;
+            });
+            
+            rightBtn.addEventListener('mouseup', () => {
+                movingRight = false;
+            });
+            
+            rightBtn.addEventListener('mouseleave', () => {
+                movingRight = false;
+            });
+            
+            // Кнопка прыжка
+            jumpBtn.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                player.jump();
+            });
+            
+            jumpBtn.addEventListener('mousedown', () => {
+                player.jump();
+            });
+        }
         
         // Управление с помощью гироскопа
         function handleGyro(e) {
@@ -816,11 +865,14 @@
             const gamma = e.gamma; // Наклон влево-вправо
             
             if (gamma < -10) {
-                player.velocityX = -gameSpeed;
+                movingLeft = true;
+                movingRight = false;
             } else if (gamma > 10) {
-                player.velocityX = gameSpeed;
+                movingRight = true;
+                movingLeft = false;
             } else {
-                player.velocityX = 0;
+                movingLeft = false;
+                movingRight = false;
             }
         }
         
@@ -830,6 +882,12 @@
             tutorialElement.textContent = gyroEnabled ? 
                 "Используйте наклон телефона для управления" : 
                 "Используйте кнопки для управления";
+            
+            // Сброс управления кнопками при включении гироскопа
+            if (gyroEnabled) {
+                movingLeft = false;
+                movingRight = false;
+            }
         });
         
         soundToggle.addEventListener('change', () => {
@@ -860,6 +918,7 @@
         window.addEventListener('load', () => {
             setupCanvas();
             player.init();
+            setupControls();
             
             // Проверка поддержки гироскопа
             if (window.DeviceOrientationEvent) {
@@ -867,8 +926,8 @@
                 gyroToggle.disabled = false;
             } else {
                 gyroToggle.disabled = true;
-                document.querySelector('.settings-item span').innerHTML += 
-                    '<br><small>(не поддерживается)</small>';
+                document.querySelector('.settings-item:first-child span').innerHTML = 
+                    'Гироскопическое управление <br><small>(не поддерживается)</small>';
             }
             
             // Запуск мини-анимации на стартовом экране
