@@ -2,50 +2,39 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Doodle Jump Adventure</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doodle Jump</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            touch-action: manipulation;
-            user-select: none;
         }
         
         body {
-            font-family: 'Rubik', sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
             overflow: hidden;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            touch-action: none;
             position: relative;
         }
         
         .game-container {
-            width: 100%;
-            max-width: 500px;
-            height: 85vh;
             position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         #gameCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            max-width: 100%;
+            max-height: 100%;
+            background: linear-gradient(to bottom, #87CEEB, #F0F8FF);
         }
         
         .ui-overlay {
@@ -58,897 +47,941 @@
             z-index: 10;
         }
         
-        .score-display {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 24px;
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 16px;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .parachute-count {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 24px;
-            font-weight: 700;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px 16px;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .controls {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
+        .ui-element {
             pointer-events: auto;
         }
         
-        .directional-controls {
+        /* Панель счета */
+        .score-panel {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 15px 20px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            min-width: 140px;
+        }
+        
+        .score-item {
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .score-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            opacity: 0.;
+        }
+        
+        .score-value {
+            font-size: 18px;
+            font-weight: 900;
+            color: #FFD700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Панель управления */
+        .control-panel {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
         .control-btn {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            pointer-events: auto;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            min-width: 120px;
+            text-align: center;
         }
         
         .control-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
         }
         
         .control-btn:active {
-            transform: scale(0.95);
-            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(0px);
         }
         
-        .jump-btn {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00c853, #009624);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            pointer-events: auto;
+        .gyro-toggle.active {
+            background: rgba(76, 175, 80, 0.8);
+            border-color: #4CAF50;
         }
         
-        .jump-btn:hover {
-            background: linear-gradient(135deg, #00e676, #00c853);
-            transform: scale(1.05);
+        .restart-btn {
+            background: rgba(255, 107, 107, 0.8);
+            border-color: #FF6B6B;
         }
         
-        .jump-btn:active {
-            transform: scale(0.95);
-            background: linear-gradient(135deg, #00b248, #008c22);
+        .restart-btn:hover {
+            background: rgba(255, 82, 82, 0.9);
         }
         
-        .btn-icon {
-            font-size: 30px;
-            color: white;
-        }
-        
-        .menu-screen, .settings-screen {
+        /* Мобильные кнопки управления */
+        .mobile-controls {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.8);
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: 15px;
             z-index: 20;
-            padding: 20px;
-            text-align: center;
         }
         
-        .settings-screen {
-            display: none;
-        }
-        
-        .title {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
-            color: #ffd700;
-            letter-spacing: 2px;
-        }
-        
-        .subtitle {
-            font-size: 18px;
-            margin-bottom: 30px;
-            max-width: 80%;
-            line-height: 1.6;
-            color: #e0e0e0;
-        }
-        
-        .btn {
-            background: linear-gradient(135deg, #2196F3, #0D47A1);
+        .direction-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 238, 0, 0.2);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: 500;
-            border-radius: 50px;
-            margin: 10px 0;
+            font-size: 24px;
+            font-weight: bold;
             cursor: pointer;
-            width: 80%;
-            max-width: 280px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(1px);
-        }
-        
-        .btn-settings {
-            background: linear-gradient(135deg, #9C27B0, #6A1B9A);
-        }
-        
-        .btn-exit {
-            background: linear-gradient(135deg, #f44336, #c62828);
-        }
-        
-        .settings-item {
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            width: 80%;
-            max-width: 280px;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
-        
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        
-        .game-over {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 15;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            text-align: center;
+            user-select: none;
+            touch-action: manipulation;
         }
         
-        .final-score {
-            font-size: 72px;
-            font-weight: 700;
-            color: #ffd700;
-            margin: 20px 0;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        .direction-btn:active {
+            background: rgba(255, 255, 0, 0.4);
+            transform: scale(0.95);
         }
         
-        .tutorial {
-            position: absolute;
-            bottom: 120px;
-            width: 100%;
-            text-align: center;
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 0 20px;
-            animation: pulse 2s infinite;
+        .direction-btn:hover {
+            background: rgba(165, 149, 0, 0.3);
         }
         
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-        
-        .item-notification {
+        /* Экран окончания игры */
+        .game-over {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: none;
+            max-width: 90%;
+            min-width: 300px;
+        }
+        
+        .game-over h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 32px;
+            font-weight: 900;
+        }
+        
+        .final-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .play-again-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
             padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 24px;
-            font-weight: 700;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-            z-index: 30;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
         
-        .notification-show {
-            animation: showNotification 2s forwards;
+        .play-again-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
         
-        @keyframes showNotification {
-            0% { opacity: 0; top: 50%; }
-            20% { opacity: 1; top: 45%; }
-            80% { opacity: 1; top: 45%; }
-            100% { opacity: 0; top: 40%; }
-        }
-        
-        @media (max-width: 500px) {
-            .title {
-                font-size: 36px;
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .score-panel {
+                top: 10px;
+                left: 10px;
+                padding: 12px 16px;
+                min-width: 120px;
+            }
+            
+            .score-label {
+                font-size: 12px;
+            }
+            
+            .score-value {
+                font-size: 16px;
+            }
+            
+            .control-panel {
+                top: 10px;
+                right: 10px;
+                gap: 8px;
             }
             
             .control-btn {
-                width: 60px;
-                height: 60px;
+                padding: 10px 12px;
+                font-size: 12px;
+                min-width: 100px;
             }
             
-            .jump-btn {
-                width: 80px;
-                height: 80px;
+            .mobile-controls {
+                display: flex;
+                bottom: 15px;
             }
+            
+            .direction-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
+            }
+            
+            .game-over {
+                padding: 30px 20px;
+                min-width: 280px;
+            }
+            
+            .game-over h2 {
+                font-size: 28px;
+            }
+            
+            .stat-value {
+                font-size: 24px;
+            }
+            
+            .stat-label {
+                font-size: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .final-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .direction-btn {
+                width: 55px;
+                height: 55px;
+                font-size: 18px;
+            }
+        }
+        
+        /* Анимации */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .score-value {
+            animation: pulse 2s infinite ease-in-out;
+        }
+        
+        .gyro-toggle.active {
+            animation: pulse 3s infinite ease-in-out;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <canvas id="gameCanvas"></canvas>
+        <canvas id="gameCanvas" width="400" height="600"></canvas>
         
         <div class="ui-overlay">
-            <div class="score-display">
-                <span>🏆</span>
-                <span id="score">0</span>
-            </div>
-            
-            <div class="parachute-count">
-                <span>🪂</span>
-                <span id="parachutes">0</span>
-            </div>
-            
-            <div class="controls">
-                <div class="directional-controls">
-                    <div class="control-btn" id="leftBtn">
-                        <div class="btn-icon">←</div>
-                    </div>
-                    <div class="control-btn" id="rightBtn">
-                        <div class="btn-icon">→</div>
-                    </div>
+            <!-- Панель счета -->
+            <div class="score-panel ui-element">
+                <div class="score-item">
+                    <span class="score-label">Очки:</span>
+                    <span class="score-value" id="scoreValue">0</span>
                 </div>
-                <div class="jump-btn" id="jumpBtn">
-                    <div class="btn-icon">↑</div>
+                <div class="score-item">
+                    <span class="score-label">Высота:</span>
+                    <span class="score-value" id="heightValue"> 0м</span>
                 </div>
             </div>
             
-            <div class="tutorial" id="tutorial">
-                Используйте кнопки или наклон телефона для управления
-            </div>
-        </div>
-        
-        <div class="menu-screen" id="menuScreen">
-            <h1 class="title">Doodle Jump Adventure</h1>
-            <p class="subtitle">Прыгай по платформам, собирай каски и парашюты! Стань лучшим скалолазом!</p>
-            <button class="btn" id="startBtn">НАЧАТЬ ИГРУ</button>
-            <button class="btn btn-settings" id="settingsBtn">НАСТРОЙКИ</button>
-            <button class="btn btn-exit" id="exitBtn">ВЫЙТИ</button>
-        </div>
-        
-        <div class="settings-screen" id="settingsScreen">
-            <h1 class="title">Настройки</h1>
-            
-            <div class="settings-item">
-                <span>Гироскопическое управление</span>
-                <label class="switch">
-                    <input type="checkbox" id="gyroToggle">
-                    <span class="slider"></span>
-                </label>
+            <!-- Панель управления -->
+            <div class="control-panel ui-element">
+                <button class="control-btn gyro-toggle" id="gyroToggle">
+                    🔄 Гироскоп: ВЫКЛ
+                </button>
+                <button class="control-btn restart-btn" onclick="restartGame()">
+                    🔄 Перезапуск
+                </button>
             </div>
             
-            <div class="settings-item">
-                <span>Звуковые эффекты</span>
-                <label class="switch">
-                    <input type="checkbox" id="soundToggle" checked>
-                    <span class="slider"></span>
-                </label>
+            <!-- Мобильные кнопки управления -->
+            <div class="mobile-controls ui-element" id="mobileControls">
+                <button class="direction-btn" id="leftBtn">←</button>
+                <button class="direction-btn" id="rightBtn">→</button>
             </div>
             
-            <button class="btn" id="backBtn">НАЗАД</button>
+            <!-- Экран окончания игры -->
+            <div class="game-over ui-element" id="gameOverScreen">
+                <h2>🎮 Игра окончена!</h2>
+                
+                <div class="final-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="finalScore">0</span>
+                        <span class="stat-label">Очки</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="finalHeight">0м</span>
+                        <span class="stat-label">Высота</span>
+                    </div>
+                </div>
+                
+                <button class="play-again-btn" onclick="restartGame()">
+                    🚀 Играть снова
+                </button>
+            </div>
         </div>
-        
-        <div class="game-over" id="gameOver">
-            <h1 class="title">Игра окончена!</h1>
-            <div class="final-score" id="finalScore">0</div>
-            <p class="subtitle">Парашютов использовано: <span id="parachutesUsed">0</span></p>
-            <button class="btn" id="restartBtn">ИГРАТЬ СНОВА</button>
-            <button class="btn btn-settings" id="menuBtn">МЕНЮ</button>
-        </div>
-        
-        <div class="item-notification" id="itemNotification"></div>
     </div>
 
     <script>
-        // Основные переменные игры
+        // Получаем canvas и контекст
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const scoreElement = document.getElementById('score');
-        const parachutesElement = document.getElementById('parachutes');
-        const menuScreen = document.getElementById('menuScreen');
-        const settingsScreen = document.getElementById('settingsScreen');
-        const gameOverScreen = document.getElementById('gameOver');
-        const finalScoreElement = document.getElementById('finalScore');
-        const parachutesUsedElement = document.getElementById('parachutesUsed');
-        const itemNotification = document.getElementById('itemNotification');
-        const tutorialElement = document.getElementById('tutorial');
-        const gyroToggle = document.getElementById('gyroToggle');
-        const soundToggle = document.getElementById('soundToggle');
-        const leftBtn = document.getElementById('leftBtn');
-        const rightBtn = document.getElementById('rightBtn');
-        const jumpBtn = document.getElementById('jumpBtn');
-        
-        let gameActive = false;
-        let gyroEnabled = false;
-        let soundEnabled = true;
-        let score = 0;
-        let parachutes = 0;
-        let parachutesUsed = 0;
-        let gameSpeed = 3;
-        let highestPoint = 0;
-        let lastSafeHeight = 0;
-        let movingLeft = false;
-        let movingRight = false;
-        
-        // Установка размеров canvas
-        function setupCanvas() {
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
+
+        // Адаптация под размер экрана
+        function resizeCanvas() {
+            const maxWidth = Math.min(window.innerWidth * 0.9, 400);
+            const maxHeight = Math.min(window.innerHeight * 0.9, 600);
+            
+            canvas.width = maxWidth;
+            canvas.height = maxHeight;
         }
-        
-        // Объект игрока
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Игровые переменные
+        let gameState = 'loading';
+        let score = 0;
+        let maxHeight = 0;
+        let cameraY = 0;
+        let gyroEnabled = false;
+        let gyroPermissionGranted = false;
+
+        // Загрузка ассетов
+        const assets = {
+            player: new Image(),
+            platform: new Image(),
+            collectible: new Image(),
+            background: new Image(),
+            loaded: 0,
+            total: 4
+        };
+
+        // Загружаем изображения
+        function loadAssets() {
+            assets.player.onload = () => checkAssetsLoaded();
+            assets.platform.onload = () => checkAssetsLoaded();
+            assets.collectible.onload = () => checkAssetsLoaded();
+            assets.background.onload = () => checkAssetsLoaded();
+            
+            assets.player.src = 'player.png';
+            assets.platform.src = 'platform.png';  
+            assets.collectible.src = 'collectible.png';
+            assets.background.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
+        }
+
+        function checkAssetsLoaded() {
+            assets.loaded++;
+            if (assets.loaded === assets.total) {
+                gameState = 'playing';
+                console.log('Все ассеты загружены!');
+            }
+        }
+
+        // Игрок
         const player = {
-            x: canvas.width / 2 - 25,
-            y: canvas.height - 150,
-            width: 50,
-            height: 50,
+            x: canvas.width / 2,
+            y: canvas.height - 120,
+            width: 60,
+            height: 80,
             velocityX: 0,
             velocityY: 0,
-            jumpForce: -15,
-            gravity: 0.8,
-            isJumping: false,
-            image: null,
-            
-            init() {
-                this.image = new Image();
-                this.image.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="40" r="20" fill="%23FF6B6B"/><rect x="35" y="60" width="30" height="40" rx="10" fill="%234ECDC4"/><circle cx="40" cy="30" r="4" fill="white"/><circle cx="60" cy="30" r="4" fill="white"/><path d="M45 40 Q50 45 55 40" stroke="white" stroke-width="3" fill="none"/></svg>';
-            },
-            
-            update() {
-                // Применяем гравитацию
-                this.velocityY += this.gravity;
-                
-                // Обновление горизонтального движения
-                if (movingLeft) this.velocityX = -gameSpeed;
-                else if (movingRight) this.velocityX = gameSpeed;
-                else this.velocityX = 0;
-                
-                // Обновляем позицию
-                this.x += this.velocityX;
-                this.y += this.velocityY;
-                
-                // Ограничение движения по горизонтали
-                if (this.x < 0) this.x = 0;
-                if (this.x + this.width > canvas.width) this.x = canvas.width - this.width;
-                
-                // Проверка на выход за нижнюю границу
-                if (this.y > canvas.height) {
-                    if (parachutes > 0) {
-                        parachutes--;
-                        parachutesUsed++;
-                        this.y = lastSafeHeight;
-                        this.velocityY = this.jumpForce * 0.7;
-                        showNotification('Парашют активирован!');
-                    } else {
-                        endGame();
-                    }
-                }
-                
-                // Обновляем последнюю безопасную высоту
-                if (this.y < lastSafeHeight) {
-                    lastSafeHeight = this.y;
-                }
-            },
-            
-            draw() {
-                ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
-            },
-            
-            jump() {
-                if (!this.isJumping) {
-                    this.velocityY = this.jumpForce;
-                    this.isJumping = true;
-                }
-            },
-            
-            reset() {
-                this.x = canvas.width / 2 - 25;
-                this.y = canvas.height - 150;
-                this.velocityX = 0;
-                this.velocityY = 0;
-                this.isJumping = false;
-            }
+            onGround: false,
+            color: '#FF6B6B'
         };
-        
-        // Платформы
-        const platforms = [];
-        const platformImage = new Image();
-        platformImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30"><rect x="0" y="0" width="100" height="30" rx="5" fill="%23A1887F"/><rect x="5" y="5" width="90" height="20" rx="3" fill="%238D6E63"/></svg>';
-        
-        // Предметы
-        const items = [];
-        const helmetImage = new Image();
-        helmetImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23FFD700"/><circle cx="50" cy="35" r="15" fill="%23FFD700"/><rect x="25" y="35" width="50" height="30" fill="%23FFD700"/></svg>';
-        
-        const parachuteImage = new Image();
-        parachuteImage.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M20,30 Q50,5 80,30 L65,70 Q50,85 35,70 Z" fill="%234FC3F7"/><circle cx="50" cy="75" r="8" fill="%23795548"/><path d="M50,75 L50,95 M45,75 L30,90 M55,75 L70,90" stroke="%23795548" stroke-width="3"/></svg>';
-        
-        // Создание начальных платформ
-        function createInitialPlatforms() {
-            platforms.length = 0;
-            
-            // Стартовая платформа
-            platforms.push({
-                x: canvas.width / 2 - 75,
-                y: canvas.height - 100,
-                width: 150,
-                height: 20
-            });
-            
-            // Генерация остальных платформ
-            for (let i = 0; i < 10; i++) {
-                createPlatform(canvas.height - 150 - i * 80);
-            }
-        }
-        
-        // Создание новой платформы
-        function createPlatform(yPos) {
-            const minWidth = 60;
-            const maxWidth = 150;
-            const width = minWidth + Math.random() * (maxWidth - minWidth);
-            const x = Math.random() * (canvas.width - width);
+
+        // Массивы объектов
+        let platforms = [];
+        let collectibles = [];
+
+        // Константы игры
+        const GRAVITY = 0.3;
+        const JUMP_FORCE = -12;
+        const PLAYER_SPEED = 5;
+        const PLATFORM_WIDTH = 110;
+        const PLATFORM_HEIGHT = 70;
+
+        // Типы платформ
+        const PLATFORM_TYPES = {
+            NORMAL: 'normal',
+            TEMPORARY: 'temporary',
+            MOVING: 'moving'
+        };
+
+        // Переменные для управления кнопками
+        let leftPressed = false;
+        let rightPressed = false;
+
+        // Инициализация платформ
+        function initializePlatforms() {
+            platforms = [];
             
             platforms.push({
-                x: x,
-                y: yPos,
-                width: width,
-                height: 20
+                x: canvas.width / 2 - PLATFORM_WIDTH / 2,
+                y: canvas.height - 80,
+                width: PLATFORM_WIDTH,
+                height: PLATFORM_HEIGHT,
+                type: PLATFORM_TYPES.NORMAL,
+                color: '#4CAF50',
+                used: false
             });
-            
-            // Случайное добавление предметов
-            if (Math.random() > 0.7) {
-                createItem(x + width/2 - 15, yPos - 40, Math.random() > 0.5 ? 'helmet' : 'parachute');
+
+            for (let i = 1; i < 20; i++) {
+                platforms.push({
+                    x: Math.random() * (canvas.width - PLATFORM_WIDTH),
+                    y: canvas.height - 80 - (i * 220),
+                    width: PLATFORM_WIDTH,
+                    height: PLATFORM_HEIGHT,
+                    type: PLATFORM_TYPES.NORMAL,
+                    color: '#4CAF50',
+                    used: false,
+                    moveSpeed: 0
+                });
+                
+                if (Math.random() < 0.3) {
+                    collectibles.push({
+                        x: platforms[platforms.length - 1].x + PLATFORM_WIDTH / 2 - 20,
+                        y: platforms[platforms.length - 1].y - 30,
+                        width: 50,
+                        height: 60,
+                        color: '#FFD700',
+                        collected: false
+                    });
+                }
             }
         }
-        
-        // Создание предмета
-        function createItem(x, y, type) {
-            items.push({
-                x: x,
+
+        // Генерация платформы на определённой высоте
+        function generatePlatform(y) {
+            const height = Math.abs(cameraY - y);
+            let type = PLATFORM_TYPES.NORMAL;
+            let color = '#4CAF50';
+            
+            if (height > 800) {
+                const rand = Math.random();
+                if (rand < 0.3) {
+                    type = PLATFORM_TYPES.TEMPORARY;
+                } else if (rand < 0.5) {
+                    type = PLATFORM_TYPES.MOVING;
+                }
+            }
+
+            const platform = {
+                x: Math.random() * (canvas.width - PLATFORM_WIDTH),
                 y: y,
-                width: 30,
-                height: 30,
-                type: type
-            });
-        }
-        
-        // Проверка коллизий
-        function checkCollisions() {
-            // Коллизии с платформами
-            for (let i = 0; i < platforms.length; i++) {
-                const p = platforms[i];
-                
-                // Проверка, стоит ли игрок на платформе
-                if (
-                    player.y + player.height <= p.y + 10 &&
-                    player.y + player.height + player.velocityY >= p.y &&
-                    player.x + player.width > p.x &&
-                    player.x < p.x + p.width
-                ) {
-                    player.y = p.y - player.height;
-                    player.velocityY = 0;
-                    player.isJumping = false;
-                }
+                width: PLATFORM_WIDTH,
+                height: PLATFORM_HEIGHT,
+                type: type,
+                used: false,
+                moveSpeed: type === PLATFORM_TYPES.MOVING ? (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1) : 0
+            };
+
+            platforms.push(platform);
+
+            if (Math.random() < 0.3) {
+                collectibles.push({
+                    x: platform.x + platform.width / 2 - 10,
+                    y: platform.y - 30,
+                    width: 50,
+                    height: 60,
+                    collected: false
+                });
             }
+        }
+
+        // Обработка гироскопа
+        function requestGyroPermission() {
+            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                    .then(response => {
+                        if (response === 'granted') {
+                            gyroPermissionGranted = true;
+                            enableGyroscope();
+                        } else {
+                            alert('Разрешение на использование гироскопа отклонено');
+                        }
+                    })
+                    .catch(console.error);
+            } else {
+                gyroPermissionGranted = true;
+                enableGyroscope();
+            }
+        }
+
+        function enableGyroscope() {
+            if (gyroPermissionGranted) {
+                window.addEventListener('deviceorientation', handleGyroscope);
+                gyroEnabled = true;
+                updateGyroButton();
+                updateMobileControls();
+            }
+        }
+
+        function disableGyroscope() {
+            window.removeEventListener('deviceorientation', handleGyroscope);
+            gyroEnabled = false;
+            updateGyroButton();
+            updateMobileControls();
+        }
+
+        function handleGyroscope(event) {
+            if (!gyroEnabled || gameState !== 'playing') return;
             
-            // Коллизии с предметами
-            for (let i = items.length - 1; i >= 0; i--) {
-                const item = items[i];
+            const gamma = event.gamma;
+            if (gamma !== null) {
+                const sensitivity = 0.3;
+                player.velocityX = gamma * sensitivity;
                 
-                if (
-                    player.x < item.x + item.width &&
-                    player.x + player.width > item.x &&
-                    player.y < item.y + item.height &&
-                    player.y + player.height > item.y
-                ) {
-                    if (item.type === 'helmet') {
-                        score += 50;
-                        showNotification('+50 очков!');
-                    } else if (item.type === 'parachute') {
-                        parachutes++;
-                        showNotification('Парашют!');
-                    }
-                    
-                    items.splice(i, 1);
-                }
+                if (player.velocityX > PLAYER_SPEED) player.velocityX = PLAYER_SPEED;
+                if (player.velocityX < -PLAYER_SPEED) player.velocityX = -PLAYER_SPEED;
             }
         }
+
+        function updateGyroButton() {
+            const button = document.getElementById('gyroToggle');
+            if (gyroEnabled) {
+                button.innerHTML = '🔄 Гироскоп: ВКЛ';
+                button.classList.add('active');
+            } else {
+                button.innerHTML = '🔄 Гироскоп: ВЫКЛ';
+                button.classList.remove('active');
+            }
+        }
+
+        function updateMobileControls() {
+            const controls = document.getElementById('mobileControls');
+            if (window.innerWidth <= 768 && !gyroEnabled) {
+                controls.style.display = 'flex';
+            } else {
+                controls.style.display = 'none';
+            }
+        }
+
+        // Обработчики кнопок
+        document.getElementById('gyroToggle').addEventListener('click', function() {
+            if (gyroEnabled) {
+                disableGyroscope();
+            } else {
+                if (!gyroPermissionGranted) {
+                    requestGyroPermission();
+                } else {
+                    enableGyroscope();
+                }
+            }
+        });
+
+        // Мобильные кнопки управления
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            leftPressed = true;
+        });
+
+        leftBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            leftPressed = false;
+        });
+
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            rightPressed = true;
+        });
+
+        rightBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            rightPressed = false;
+        });
+
+        // Поддержка мыши для кнопок
+        leftBtn.addEventListener('mousedown', () => leftPressed = true);
+        leftBtn.addEventListener('mouseup', () => leftPressed = false);
+        rightBtn.addEventListener('mousedown', () => rightPressed = true);
+        rightBtn.addEventListener('mouseup', () => rightPressed = false);
+
+        // Управление клавиатурой
+        const keys = {};
         
+        window.addEventListener('keydown', (e) => {
+            keys[e.key] = true;
+        });
+        
+        window.addEventListener('keyup', (e) => {
+            keys[e.key] = false;
+        });
+
+        // Инициализация отображения мобильных кнопок
+        updateMobileControls();
+        window.addEventListener('resize', updateMobileControls);
+
         // Обновление игры
         function update() {
-            if (!gameActive) return;
-            
-            player.update();
-            checkCollisions();
-            
-            // Обновление счета (высота)
-            const currentHeight = Math.max(0, canvas.height - player.y);
-            if (currentHeight > highestPoint) {
-                score += Math.floor(currentHeight - highestPoint);
-                highestPoint = currentHeight;
-                scoreElement.textContent = score;
-                parachutesElement.textContent = parachutes;
+            if (gameState !== 'playing') return;
+
+            // Управление
+            if (!gyroEnabled) {
+                if (keys['ArrowLeft'] || keys['a'] || keys['A'] || leftPressed) {
+                    player.velocityX = -PLAYER_SPEED;
+                } else if (keys['ArrowRight'] || keys['d'] || keys['D'] || rightPressed) {
+                    player.velocityX = PLAYER_SPEED;
+                } else {
+                    player.velocityX *= 0.8;
+                }
             }
-            
-            // Перемещение платформ вниз (создает иллюзию подъема)
-            if (player.y < canvas.height / 3) {
-                const diff = canvas.height / 3 - player.y;
-                player.y = canvas.height / 3;
-                
-                // Сдвиг платформ и предметов вниз
-                platforms.forEach(p => p.y += diff);
-                items.forEach(item => item.y += diff);
-                
-                // Увеличение сложности
-                gameSpeed = 3 + Math.floor(score / 1000) * 0.5;
-                
-                // Удаление платформ, ушедших за экран
-                for (let i = platforms.length - 1; i >= 0; i--) {
-                    if (platforms[i].y > canvas.height) {
-                        platforms.splice(i, 1);
+
+            // Физика игрока
+            player.velocityY += GRAVITY;
+            player.x += player.velocityX;
+            player.y += player.velocityY;
+
+            // Границы экрана по горизонтали
+            if (player.x < 0) {
+                player.x = canvas.width;
+            } else if (player.x > canvas.width) {
+                player.x = 0;
+            }
+
+            // Обновление движущихся платформ
+            platforms.forEach(platform => {
+                if (platform.type === PLATFORM_TYPES.MOVING) {
+                    platform.x += platform.moveSpeed;
+                    
+                    if (platform.x <= 0 || platform.x >= canvas.width - platform.width) {
+                        platform.moveSpeed *= -1;
                     }
                 }
-                
-                // Удаление предметов, ушедших за экран
-                for (let i = items.length - 1; i >= 0; i--) {
-                    if (items[i].y > canvas.height) {
-                        items.splice(i, 1);
+            });
+
+            // Проверка столкновения с платформами
+            player.onGround = false;
+            platforms.forEach(platform => {
+                if (player.velocityY > 0 &&
+                    player.x < platform.x + platform.width &&
+                    player.x + player.width > platform.x &&
+                    player.y + player.height > platform.y &&
+                    player.y + player.height < platform.y + platform.height + 10) {
+                    
+                    player.y = platform.y - player.height;
+                    player.velocityY = JUMP_FORCE;
+                    player.onGround = true;
+
+                    if (platform.type === PLATFORM_TYPES.TEMPORARY && !platform.used) {
+                        platform.used = true;
+                        setTimeout(() => {
+                            const index = platforms.indexOf(platform);
+                            if (index > -1) {
+                                platforms.splice(index, 1);
+                            }
+                        }, 500);
                     }
                 }
-                
-                // Создание новых платформ сверху
-                while (platforms.length < 10) {
-                    createPlatform(platforms[0].y - 80 - Math.random() * 50);
+            });
+
+            // Проверка сбора предметов
+            collectibles.forEach(collectible => {
+                if (!collectible.collected &&
+                    player.x < collectible.x + collectible.width &&
+                    player.x + player.width > collectible.x &&
+                    player.y < collectible.y + collectible.height &&
+                    player.y + player.height > collectible.y) {
+                    
+                    collectible.collected = true;
+                    score += 50;
+                }
+            });
+
+            // Обновление камеры
+            const targetCameraY = player.y - canvas.height / 3;
+            if (targetCameraY < cameraY) {
+                cameraY = targetCameraY;
+            }
+
+            // Обновление максимальной высоты и счёта
+            const currentHeight = Math.abs(Math.min(player.y - (canvas.height - 120), 0));
+            if (currentHeight > maxHeight) {
+                const heightDiff = currentHeight - maxHeight;
+                maxHeight = currentHeight;
+                score += Math.floor(heightDiff / 10);
+            }
+
+            // Генерация новых платформ
+            let needNewPlatforms = false;
+            
+            if (platforms.length === 0) {
+                needNewPlatforms = true;
+            } else {
+                const highestPlatform = Math.min(...platforms.map(p => p.y));
+                if (highestPlatform > cameraY - canvas.height * 2) {
+                    needNewPlatforms = true;
                 }
             }
-        }
-        
-        // Отрисовка игры
-        function draw() {
-            // Очистка экрана
-            ctx.fillStyle = 'rgba(25, 40, 80, 0.2)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            // Рисуем фон (простые облака)
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-            for (let i = 0; i < 5; i++) {
-                const x = (Date.now() / 50 + i * 200) % (canvas.width + 300) - 150;
-                const y = 100 + i * 80;
-                drawCloud(x, y, 80, 40);
+            if (needNewPlatforms) {
+                const startY = platforms.length > 0 ? 
+                    Math.min(...platforms.map(p => p.y)) - 170 : 
+                    cameraY - 170;
+                    
+                for (let i = 0; i < 8; i++) {
+                    generatePlatform(startY - (i * 170));
+                }
             }
-            
-            // Рисуем платформы
-            platforms.forEach(p => {
-                ctx.drawImage(platformImage, p.x, p.y, p.width, p.height);
-            });
-            
-            // Рисуем предметы
-            items.forEach(item => {
-                const img = item.type === 'helmet' ? helmetImage : parachuteImage;
-                ctx.drawImage(img, item.x, item.y, item.width, item.height);
-            });
-            
-            // Рисуем игрока
-            player.draw();
+
+            // Удаление платформ и предметов
+            const cleanupThreshold = cameraY + canvas.height + 400;
+            platforms = platforms.filter(platform => platform.y < cleanupThreshold);
+            collectibles = collectibles.filter(collectible => 
+                !collectible.collected && collectible.y < cleanupThreshold
+            );
+
+            // Проверка окончания игры
+            if (player.y > cameraY + canvas.height + 100) {
+                gameState = 'gameOver';
+                showGameOver();
+            }
+
+            // Обновление UI
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('heightValue').textContent = Math.floor(maxHeight / 10) + 'м';
         }
-        
-        // Рисуем облако
-        function drawCloud(x, y, width, height) {
-            ctx.beginPath();
-            ctx.arc(x, y, height/2, 0, Math.PI * 2);
-            ctx.arc(x + width/3, y - height/4, height/2.5, 0, Math.PI * 2);
-            ctx.arc(x + width/2, y, height/2.2, 0, Math.PI * 2);
-            ctx.arc(x + width * 2/3, y + height/5, height/3, 0, Math.PI * 2);
-            ctx.arc(x + width, y, height/2, 0, Math.PI * 2);
-            ctx.fill();
+
+        // Рендеринг
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (gameState === 'loading') {
+                ctx.fillStyle = '#333';
+                ctx.font = '24px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Загрузка ассетов...', canvas.width / 2, canvas.height / 2);
+                ctx.fillText(`${assets.loaded}/${assets.total}`, canvas.width / 2, canvas.height / 2 + 40);
+                return;
+            }
+
+            ctx.save();
+            ctx.translate(0, -cameraY);
+
+            // Рендеринг платформ
+            platforms.forEach(platform => {
+                if (assets.platform.complete && assets.platform.naturalWidth > 1) {
+                    ctx.drawImage(assets.platform, platform.x, platform.y, platform.width, platform.height);
+                } else {
+                    // Улучшенный fallback для платформ
+                    ctx.fillStyle = '#4CAF50';
+                    ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+                    ctx.fillStyle = '#388E3C';
+                    ctx.fillRect(platform.x, platform.y, platform.width, 8);
+                }
+            });
+
+            // Рендеринг предметов для сбора
+            collectibles.forEach(collectible => {
+                if (!collectible.collected) {
+                    if (assets.collectible.complete && assets.collectible.naturalWidth > 1) {
+                        ctx.drawImage(assets.collectible, collectible.x, collectible.y, collectible.width, collectible.height);
+                    } else {
+                        // Улучшенный предмет - звездочка
+                        ctx.fillStyle = '#FFD700';
+                        ctx.beginPath();
+                        const cx = collectible.x + collectible.width / 2;
+                        const cy = collectible.y + collectible.height / 2;
+                        const spikes = 5;
+                        const outerRadius = collectible.width / 3;
+                        const innerRadius = outerRadius * 0.5;
+                        
+                        for (let i = 0; i < spikes * 2; i++) {
+                            const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                            const angle = (i * Math.PI) / spikes;
+                            const x = cx + Math.cos(angle) * radius;
+                            const y = cy + Math.sin(angle) * radius;
+                            if (i === 0) ctx.moveTo(x, y);
+                            else ctx.lineTo(x, y);
+                        }
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+                }
+            });
+
+            // Рендеринг игрока
+            if (assets.player.complete && assets.player.naturalWidth > 1) {
+                ctx.drawImage(assets.player, player.x, player.y, player.width, player.height);
+            } else {
+                // Улучшенный fallback игрока - персонаж с лицом
+                ctx.fillStyle = player.color;
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+                
+                // Лицо
+                ctx.fillStyle = 'white';
+                ctx.fillRect(player.x + 10, player.y + 10, 12, 12);
+                ctx.fillRect(player.x + 38, player.y + 10, 12, 12);
+                ctx.fillStyle = 'black';
+                ctx.fillRect(player.x + 14, player.y + 14, 4, 4);
+                ctx.fillRect(player.x + 42, player.y + 14, 4, 4);
+                
+                // Улыбка
+                ctx.fillStyle = 'black';
+                ctx.fillRect(player.x + 20, player.y + 35, 20, 3);
+                ctx.fillRect(player.x + 18, player.y + 32, 3, 3);
+                ctx.fillRect(player.x + 39, player.y + 32, 3, 3);
+            }
+
+            ctx.restore();
         }
-        
-        // Игровой цикл
+
+        // Показать экран окончания игры
+        function showGameOver() {
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('finalHeight').textContent = Math.floor(maxHeight / 10) + 'м';
+            document.getElementById('gameOverScreen').style.display = 'block';
+        }
+
+        // Перезапуск игры
+        function restartGame() {
+            gameState = 'playing';
+            score = 0;
+            maxHeight = 0;
+            cameraY = 0;
+            
+            // Сброс игрока
+            player.x = canvas.width / 2;
+            player.y = canvas.height - 120;
+            player.velocityX = 0;
+            player.velocityY = 0;
+            player.onGround = false;
+
+            // Очистка массивов
+            platforms = [];
+            collectibles = [];
+            
+            // Переинициализация платформ
+            initializePlatforms();
+            
+            // Скрытие экрана окончания игры
+            document.getElementById('gameOverScreen').style.display = 'none';
+        }
+
+        // Основной игровой цикл
         function gameLoop() {
             update();
-            draw();
-            
-            if (gameActive) {
-                requestAnimationFrame(gameLoop);
-            }
+            render();
+            requestAnimationFrame(gameLoop);
         }
+
+        // Инициализация игры
+        loadAssets();
+        initializePlatforms();
+        gameLoop();
+
+        // Обработка касаний для мобильных устройств
+        let touchStartX = 0;
+        let touchStartY = 0;
         
-        // Показ уведомления
-        function showNotification(text) {
-            itemNotification.textContent = text;
-            itemNotification.className = 'item-notification notification-show';
-            
-            setTimeout(() => {
-                itemNotification.className = 'item-notification';
-            }, 2000);
-        }
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+        });
         
-        // Завершение игры
-        function endGame() {
-            gameActive = false;
-            finalScoreElement.textContent = score;
-            parachutesUsedElement.textContent = parachutesUsed;
-            gameOverScreen.style.display = 'flex';
-        }
-        
-        // Начало новой игры
-        function startGame() {
-            gameActive = true;
-            score = 0;
-            parachutes = 0;
-            parachutesUsed = 0;
-            highestPoint = 0;
-            lastSafeHeight = canvas.height;
-            gameSpeed = 3;
-            
-            scoreElement.textContent = score;
-            parachutesElement.textContent = parachutes;
-            
-            player.reset();
-            createInitialPlatforms();
-            items.length = 0;
-            
-            menuScreen.style.display = 'none';
-            settingsScreen.style.display = 'none';
-            gameOverScreen.style.display = 'none';
-            
-            gameLoop();
-        }
-        
-        // Управление с помощью кнопок
-        function setupControls() {
-            // Левая кнопка
-            leftBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                movingLeft = true;
-            });
-            
-            leftBtn.addEventListener('touchend', () => {
-                movingLeft = false;
-            });
-            
-            leftBtn.addEventListener('mousedown', () => {
-                movingLeft = true;
-            });
-            
-            leftBtn.addEventListener('mouseup', () => {
-                movingLeft = false;
-            });
-            
-            leftBtn.addEventListener('mouseleave', () => {
-                movingLeft = false;
-            });
-            
-            // Правая кнопка
-            rightBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                movingRight = true;
-            });
-            
-            rightBtn.addEventListener('touchend', () => {
-                movingRight = false;
-            });
-            
-            rightBtn.addEventListener('mousedown', () => {
-                movingRight = true;
-            });
-            
-            rightBtn.addEventListener('mouseup', () => {
-                movingRight = false;
-            });
-            
-            rightBtn.addEventListener('mouseleave', () => {
-                movingRight = false;
-            });
-            
-            // Кнопка прыжка
-            jumpBtn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                player.jump();
-            });
-            
-            jumpBtn.addEventListener('mousedown', () => {
-                player.jump();
-            });
-        }
-        
-        // Управление с помощью гироскопа
-        function handleGyro(e) {
-            if (!gyroEnabled || !gameActive) return;
-            
-            const beta = e.beta; // Наклон вперед-назад
-            const gamma = e.gamma; // Наклон влево-вправо
-            
-            if (gamma < -10) {
-                movingLeft = true;
-                movingRight = false;
-            } else if (gamma > 10) {
-                movingRight = true;
-                movingLeft = false;
-            } else {
-                movingLeft = false;
-                movingRight = false;
-            }
-        }
-        
-        // Настройки
-        gyroToggle.addEventListener('change', () => {
-            gyroEnabled = gyroToggle.checked;
-            tutorialElement.textContent = gyroEnabled ? 
-                "Используйте наклон телефона для управления" : 
-                "Используйте кнопки для управления";
-            
-            // Сброс управления кнопками при включении гироскопа
-            if (gyroEnabled) {
-                movingLeft = false;
-                movingRight = false;
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!gyroEnabled && gameState === 'playing') {
+                const touch = e.touches[0];
+                const deltaX = touch.clientX - touchStartX;
+                
+                if (Math.abs(deltaX) > 10) {
+                    player.velocityX = deltaX > 0 ? PLAYER_SPEED : -PLAYER_SPEED;
+                }
             }
         });
         
-        soundToggle.addEventListener('change', () => {
-            soundEnabled = soundToggle.checked;
-        });
-        
-        // Обработчики кнопок меню
-        document.getElementById('startBtn').addEventListener('click', startGame);
-        document.getElementById('settingsBtn').addEventListener('click', () => {
-            menuScreen.style.display = 'none';
-            settingsScreen.style.display = 'flex';
-        });
-        document.getElementById('exitBtn').addEventListener('click', () => {
-            // В реальном Mini App здесь будет закрытие приложения
-            alert('Приложение закрыто');
-        });
-        document.getElementById('backBtn').addEventListener('click', () => {
-            settingsScreen.style.display = 'none';
-            menuScreen.style.display = 'flex';
-        });
-        document.getElementById('restartBtn').addEventListener('click', startGame);
-        document.getElementById('menuBtn').addEventListener('click', () => {
-            gameOverScreen.style.display = 'none';
-            menuScreen.style.display = 'flex';
-        });
-        
-        // Инициализация
-        window.addEventListener('load', () => {
-            setupCanvas();
-            player.init();
-            setupControls();
-            
-            // Проверка поддержки гироскопа
-            if (window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientation', handleGyro);
-                gyroToggle.disabled = false;
-            } else {
-                gyroToggle.disabled = true;
-                document.querySelector('.settings-item:first-child span').innerHTML = 
-                    'Гироскопическое управление <br><small>(не поддерживается)</small>';
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (!gyroEnabled) {
+                player.velocityX *= 0.8;
             }
-            
-            // Запуск мини-анимации на стартовом экране
-            animateTitle();
         });
-        
-        window.addEventListener('resize', setupCanvas);
-        
-        // Анимация заголовка
-        function animateTitle() {
-            const title = document.querySelector('.title');
-            let hue = 0;
-            
-            function updateTitleColor() {
-                hue = (hue + 1) % 360;
-                title.style.color = `hsl(${hue}, 100%, 60%)`;
-                requestAnimationFrame(updateTitleColor);
-            }
-            
-            updateTitleColor();
-        }
+
+        // Предотвращение потери фокуса кнопок при отпускании
+        document.addEventListener('mouseup', () => {
+            leftPressed = false;
+            rightPressed = false;
+        });
+
+        document.addEventListener('touchend', () => {
+            leftPressed = false;
+            rightPressed = false;
+        });
     </script>
 </body>
 </html>
