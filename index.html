@@ -451,10 +451,10 @@
 
         // Игрок
         const player = {
-            x: canvas.width / 2,
+            x: canvas.width / 3,
             y: canvas.height - 120,
-            width: 60,
-            height: 80,
+            width: 70,
+            height: 100,
             velocityX: 0,
             velocityY: 0,
             onGround: false,
@@ -500,7 +500,7 @@
             for (let i = 1; i < 20; i++) {
                 platforms.push({
                     x: Math.random() * (canvas.width - PLATFORM_WIDTH),
-                    y: canvas.height - 80 - (i * 220),
+                    y: canvas.height - 80 - (i * 250),
                     width: PLATFORM_WIDTH,
                     height: PLATFORM_HEIGHT,
                     type: PLATFORM_TYPES.NORMAL,
@@ -801,7 +801,7 @@
                     cameraY - 170;
                     
                 for (let i = 0; i < 8; i++) {
-                    generatePlatform(startY - (i * 170));
+                    generatePlatform(startY - (i * 250));
                 }
             }
 
