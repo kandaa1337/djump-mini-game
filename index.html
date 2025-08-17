@@ -17,6 +17,7 @@
             overflow: hidden;
             touch-action: none;
             position: relative;
+            
         }
         
         .game-container {
@@ -435,8 +436,8 @@
             assets.background.onload = () => checkAssetsLoaded();
             
             assets.player.src = 'player.png';
-            assets.platform.src = 'platform.png';  
-            assets.collectible.src = 'collectible.png';
+            assets.platform.src = 'platform_upscaled_330x210.png';  
+            assets.collectible.src = 'collectible_upscaled_330x210.png';
             assets.background.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
         }
 
@@ -468,8 +469,8 @@
         const GRAVITY = 0.3;
         const JUMP_FORCE = -12;
         const PLAYER_SPEED = 5;
-        const PLATFORM_WIDTH = 110;
-        const PLATFORM_HEIGHT = 70;
+        const PLATFORM_WIDTH = 150;
+        const PLATFORM_HEIGHT = 110;
 
         // Типы платформ
         const PLATFORM_TYPES = {
@@ -511,9 +512,9 @@
                 if (Math.random() < 0.3) {
                     collectibles.push({
                         x: platforms[platforms.length - 1].x + PLATFORM_WIDTH / 2 - 20,
-                        y: platforms[platforms.length - 1].y - 30,
-                        width: 50,
-                        height: 60,
+                        y: platforms[platforms.length - 1].y - 60,
+                        width: 110,
+                        height: 90,
                         color: '#FFD700',
                         collected: false
                     });
