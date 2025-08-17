@@ -51,7 +51,6 @@
             pointer-events: auto;
         }
         
-        /* Панель счета */
         .score-panel {
             position: absolute;
             top: 15px;
@@ -90,7 +89,6 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
         
-        /* Панель управления */
         .control-panel {
             position: absolute;
             top: 15px;
@@ -138,8 +136,7 @@
         .restart-btn:hover {
             background: rgba(255, 82, 82, 0.9);
         }
-        
-        /* Мобильные кнопки управления */
+      
         .mobile-controls {
             position: absolute;
             bottom: 20px;
@@ -178,7 +175,6 @@
             background: rgba(165, 149, 0, 0.3);
         }
         
-        /* Экран окончания игры */
         .game-over {
             position: absolute;
             top: 50%;
@@ -249,7 +245,6 @@
             box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
         }
         
-        /* Адаптивность */
         @media (max-width: 768px) {
             .score-panel {
                 top: 10px;
@@ -319,8 +314,7 @@
                 font-size: 18px;
             }
         }
-        
-        /* Анимации */
+   
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -341,7 +335,6 @@
         <canvas id="gameCanvas" width="400" height="600"></canvas>
         
         <div class="ui-overlay">
-            <!-- Панель счета -->
             <div class="score-panel ui-element">
                 <div class="score-item">
                     <span class="score-label">Очки:</span>
@@ -353,7 +346,6 @@
                 </div>
             </div>
             
-            <!-- Панель управления -->
             <div class="control-panel ui-element">
                 <button class="control-btn gyro-toggle" id="gyroToggle">
                     🔄 Гироскоп: ВЫКЛ
@@ -363,13 +355,11 @@
                 </button>
             </div>
             
-            <!-- Мобильные кнопки управления -->
             <div class="mobile-controls ui-element" id="mobileControls">
                 <button class="direction-btn" id="leftBtn">←</button>
                 <button class="direction-btn" id="rightBtn">→</button>
             </div>
             
-            <!-- Экран окончания игры -->
             <div class="game-over ui-element" id="gameOverScreen">
                 <h2>🎮 Игра окончена!</h2>
                 
@@ -392,11 +382,9 @@
     </div>
 
     <script>
-        // Получаем canvas и контекст
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Адаптация под размер экрана
         function resizeCanvas() {
             const maxWidth = Math.min(window.innerWidth * 0.9, 400);
             const maxHeight = Math.min(window.innerHeight * 0.9, 600);
@@ -408,7 +396,6 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Игровые переменные
         let gameState = 'loading';
         let score = 0;
         let maxHeight = 0;
@@ -416,7 +403,6 @@
         let gyroEnabled = false;
         let gyroPermissionGranted = false;
 
-        // Загрузка ассетов
         const assets = {
             player: new Image(),
             platform: new Image(),
@@ -426,7 +412,6 @@
             total: 4
         };
 
-        // Загружаем изображения
         function loadAssets() {
             assets.player.onload = () => checkAssetsLoaded();
             assets.platform.onload = () => checkAssetsLoaded();
@@ -447,7 +432,6 @@
             }
         }
 
-        // Игрок
         const player = {
             x: canvas.width / 2,
             y: canvas.height - 120,
@@ -459,18 +443,15 @@
             color: '#FF6B6B'
         };
 
-        // Массивы объектов
         let platforms = [];
         let collectibles = [];
 
-        // Константы игры
         const GRAVITY = 0.3;
         const JUMP_FORCE = -12;
         const PLAYER_SPEED = 5;
         const PLATFORM_WIDTH = 110;
         const PLATFORM_HEIGHT = 70;
 
-        // Типы платформ
         const PLATFORM_TYPES = {
             NORMAL: 'normal',
             TEMPORARY: 'temporary',
@@ -481,7 +462,6 @@
         let leftPressed = false;
         let rightPressed = false;
 
-        // Инициализация платформ
         function initializePlatforms() {
             platforms = [];
             
@@ -520,7 +500,6 @@
             }
         }
 
-        // Генерация платформы на определённой высоте
         function generatePlatform(y) {
             const height = Math.abs(cameraY - y);
             let type = PLATFORM_TYPES.NORMAL;
@@ -558,7 +537,6 @@
             }
         }
 
-        // Обработка гироскопа
         function requestGyroPermission() {
             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
                 DeviceMotionEvent.requestPermission()
@@ -626,7 +604,6 @@
             }
         }
 
-        // Обработчики кнопок
         document.getElementById('gyroToggle').addEventListener('click', function() {
             if (gyroEnabled) {
                 disableGyroscope();
@@ -639,7 +616,6 @@
             }
         });
 
-        // Мобильные кнопки управления
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
 
@@ -663,13 +639,11 @@
             rightPressed = false;
         });
 
-        // Поддержка мыши для кнопок
         leftBtn.addEventListener('mousedown', () => leftPressed = true);
         leftBtn.addEventListener('mouseup', () => leftPressed = false);
         rightBtn.addEventListener('mousedown', () => rightPressed = true);
         rightBtn.addEventListener('mouseup', () => rightPressed = false);
 
-        // Управление клавиатурой
         const keys = {};
         
         window.addEventListener('keydown', (e) => {
@@ -680,15 +654,12 @@
             keys[e.key] = false;
         });
 
-        // Инициализация отображения мобильных кнопок
         updateMobileControls();
         window.addEventListener('resize', updateMobileControls);
 
-        // Обновление игры
         function update() {
             if (gameState !== 'playing') return;
 
-            // Управление
             if (!gyroEnabled) {
                 if (keys['ArrowLeft'] || keys['a'] || keys['A'] || leftPressed) {
                     player.velocityX = -PLAYER_SPEED;
@@ -699,19 +670,16 @@
                 }
             }
 
-            // Физика игрока
             player.velocityY += GRAVITY;
             player.x += player.velocityX;
             player.y += player.velocityY;
 
-            // Границы экрана по горизонтали
             if (player.x < 0) {
                 player.x = canvas.width;
             } else if (player.x > canvas.width) {
                 player.x = 0;
             }
 
-            // Обновление движущихся платформ
             platforms.forEach(platform => {
                 if (platform.type === PLATFORM_TYPES.MOVING) {
                     platform.x += platform.moveSpeed;
@@ -722,7 +690,6 @@
                 }
             });
 
-            // Проверка столкновения с платформами
             player.onGround = false;
             platforms.forEach(platform => {
                 if (player.velocityY > 0 &&
@@ -747,7 +714,6 @@
                 }
             });
 
-            // Проверка сбора предметов
             collectibles.forEach(collectible => {
                 if (!collectible.collected &&
                     player.x < collectible.x + collectible.width &&
@@ -760,13 +726,11 @@
                 }
             });
 
-            // Обновление камеры
             const targetCameraY = player.y - canvas.height / 3;
             if (targetCameraY < cameraY) {
                 cameraY = targetCameraY;
             }
 
-            // Обновление максимальной высоты и счёта
             const currentHeight = Math.abs(Math.min(player.y - (canvas.height - 120), 0));
             if (currentHeight > maxHeight) {
                 const heightDiff = currentHeight - maxHeight;
@@ -774,7 +738,6 @@
                 score += Math.floor(heightDiff / 10);
             }
 
-            // Генерация новых платформ
             let needNewPlatforms = false;
             
             if (platforms.length === 0) {
@@ -796,25 +759,21 @@
                 }
             }
 
-            // Удаление платформ и предметов
             const cleanupThreshold = cameraY + canvas.height + 400;
             platforms = platforms.filter(platform => platform.y < cleanupThreshold);
             collectibles = collectibles.filter(collectible => 
                 !collectible.collected && collectible.y < cleanupThreshold
             );
 
-            // Проверка окончания игры
             if (player.y > cameraY + canvas.height + 100) {
                 gameState = 'gameOver';
                 showGameOver();
             }
 
-            // Обновление UI
             document.getElementById('scoreValue').textContent = score;
             document.getElementById('heightValue').textContent = Math.floor(maxHeight / 10) + 'м';
         }
 
-        // Рендеринг
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -830,7 +789,6 @@
             ctx.save();
             ctx.translate(0, -cameraY);
 
-            // Рендеринг платформ
             platforms.forEach(platform => {
                 if (assets.platform.complete && assets.platform.naturalWidth > 1) {
                     ctx.drawImage(assets.platform, platform.x, platform.y, platform.width, platform.height);
@@ -843,13 +801,11 @@
                 }
             });
 
-            // Рендеринг предметов для сбора
             collectibles.forEach(collectible => {
                 if (!collectible.collected) {
                     if (assets.collectible.complete && assets.collectible.naturalWidth > 1) {
                         ctx.drawImage(assets.collectible, collectible.x, collectible.y, collectible.width, collectible.height);
                     } else {
-                        // Улучшенный предмет - звездочка
                         ctx.fillStyle = '#FFD700';
                         ctx.beginPath();
                         const cx = collectible.x + collectible.width / 2;
@@ -872,23 +828,19 @@
                 }
             });
 
-            // Рендеринг игрока
             if (assets.player.complete && assets.player.naturalWidth > 1) {
                 ctx.drawImage(assets.player, player.x, player.y, player.width, player.height);
             } else {
-                // Улучшенный fallback игрока - персонаж с лицом
                 ctx.fillStyle = player.color;
                 ctx.fillRect(player.x, player.y, player.width, player.height);
                 
-                // Лицо
                 ctx.fillStyle = 'white';
                 ctx.fillRect(player.x + 10, player.y + 10, 12, 12);
                 ctx.fillRect(player.x + 38, player.y + 10, 12, 12);
                 ctx.fillStyle = 'black';
                 ctx.fillRect(player.x + 14, player.y + 14, 4, 4);
                 ctx.fillRect(player.x + 42, player.y + 14, 4, 4);
-                
-                // Улыбка
+
                 ctx.fillStyle = 'black';
                 ctx.fillRect(player.x + 20, player.y + 35, 20, 3);
                 ctx.fillRect(player.x + 18, player.y + 32, 3, 3);
@@ -898,51 +850,42 @@
             ctx.restore();
         }
 
-        // Показать экран окончания игры
         function showGameOver() {
             document.getElementById('finalScore').textContent = score;
             document.getElementById('finalHeight').textContent = Math.floor(maxHeight / 10) + 'м';
             document.getElementById('gameOverScreen').style.display = 'block';
         }
 
-        // Перезапуск игры
         function restartGame() {
             gameState = 'playing';
             score = 0;
             maxHeight = 0;
             cameraY = 0;
-            
-            // Сброс игрока
+       
             player.x = canvas.width / 2;
             player.y = canvas.height - 120;
             player.velocityX = 0;
             player.velocityY = 0;
             player.onGround = false;
 
-            // Очистка массивов
             platforms = [];
             collectibles = [];
-            
-            // Переинициализация платформ
+
             initializePlatforms();
-            
-            // Скрытие экрана окончания игры
+
             document.getElementById('gameOverScreen').style.display = 'none';
         }
 
-        // Основной игровой цикл
         function gameLoop() {
             update();
             render();
             requestAnimationFrame(gameLoop);
         }
 
-        // Инициализация игры
         loadAssets();
         initializePlatforms();
         gameLoop();
 
-        // Обработка касаний для мобильных устройств
         let touchStartX = 0;
         let touchStartY = 0;
         
@@ -972,7 +915,6 @@
             }
         });
 
-        // Предотвращение потери фокуса кнопок при отпускании
         document.addEventListener('mouseup', () => {
             leftPressed = false;
             rightPressed = false;
