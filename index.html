@@ -576,7 +576,7 @@
             
             const gamma = event.gamma;
             if (gamma !== null) {
-                const sensitivity = 0.3;
+                const sensitivity = 0.7;
                 player.velocityX = gamma * sensitivity;
                 
                 if (player.velocityX > PLAYER_SPEED) player.velocityX = PLAYER_SPEED;
