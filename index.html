@@ -606,9 +606,6 @@
                 const smoothing = 0.15;
                 player.velocityX += (targetVelocityX - player.velocityX) * smoothing;
                 
-                // Ограничиваем скорость
-                if (player.velocityX > PLAYER_SPEED) player.velocityX = PLAYER_SPEED;
-                if (player.velocityX < -PLAYER_SPEED) player.velocityX = -PLAYER_SPEED;
                 
                 // Мертвая зона для стабилизации
                 if (Math.abs(gamma) < 3) {
