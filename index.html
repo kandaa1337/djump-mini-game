@@ -420,7 +420,7 @@
 
         // Загрузка ассетов
         const assets = {
-            //player: new Image(),
+            player: new Image(),
             platform: new Image(),
             collectible: new Image(),
             background: new Image(),
@@ -435,8 +435,8 @@
             assets.collectible.onload = () => checkAssetsLoaded();
             assets.background.onload = () => checkAssetsLoaded();
             
-           // assets.player.src = 'player.png';
-           // assets.player.src = '';
+            assets.player.src = 'player.png';
+            //assets.player.src = '';
             assets.player.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAYAAAB/HSuDAADldmNhQlgAAOV2anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAANxNqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOmIzZDk2YzA5LWE3NjAtNDE1NS1hNmRiLTMwMjZmNDE2ZDI2NgAAAAHh..."
             assets.platform.src = 'platform_upscaled_330x210.png';  
             assets.collectible.src = 'collectible_upscaled_330x210.png';
