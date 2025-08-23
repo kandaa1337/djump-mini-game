@@ -12,12 +12,11 @@
         }
         
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #003087 0%, #00AEEF 100%);
             font-family: 'Arial', sans-serif;
             overflow: hidden;
             touch-action: none;
             position: relative;
-            
         }
         
         .game-container {
@@ -52,17 +51,16 @@
             pointer-events: auto;
         }
         
-        /* Панель счета */
         .score-panel {
             position: absolute;
             top: 15px;
             left: 15px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 12px;
             padding: 15px 20px;
-            color: white;
+            color: #FFFFFF;
             font-weight: bold;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             min-width: 140px;
@@ -82,6 +80,7 @@
         .score-label {
             font-size: 14px;
             opacity: 0.9;
+            color: #00AEEF;
         }
         
         .score-value {
@@ -91,7 +90,6 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
         
-        /* Панель управления */
         .control-panel {
             position: absolute;
             top: 15px;
@@ -102,12 +100,12 @@
         }
         
         .control-btn {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(0, 48, 135, 0.7);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(0, 174, 239, 0.5);
             border-radius: 12px;
             padding: 12px 16px;
-            color: white;
+            color: #FFFFFF;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
@@ -118,7 +116,7 @@
         }
         
         .control-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(0, 48, 135, 0.9);
             transform: translateY(-2px);
         }
         
@@ -127,20 +125,19 @@
         }
         
         .gyro-toggle.active {
-            background: rgba(76, 175, 80, 0.8);
-            border-color: #4CAF50;
+            background: rgba(0, 174, 239, 0.9);
+            border-color: #00AEEF;
         }
         
         .restart-btn {
-            background: rgba(255, 107, 107, 0.8);
-            border-color: #FF6B6B;
+            background: rgba(0, 48, 135, 0.9);
+            border-color: #003087;
         }
         
         .restart-btn:hover {
-            background: rgba(255, 82, 82, 0.9);
+            background: rgba(0, 48, 135, 1);
         }
         
-        /* Мобильные кнопки управления */
         .mobile-controls {
             position: absolute;
             bottom: 20px;
@@ -156,10 +153,10 @@
             width: 70px;
             height: 70px;
             border-radius: 50%;
-            background: rgba(255, 0, 0, 0.2);
+            background: rgba(0, 48, 135, 0.5);
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 0, 0, 0.3);
-            color: white;
+            border: 2px solid rgba(0, 174, 239, 0.6);
+            color: #FFFFFF;
             font-size: 24px;
             font-weight: bold;
             cursor: pointer;
@@ -172,15 +169,14 @@
         }
         
         .direction-btn:active {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(0, 174, 239, 0.7);
             transform: scale(0.95);
         }
         
         .direction-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 174, 239, 0.6);
         }
         
-        /* Экран окончания игры */
         .game-over {
             position: absolute;
             top: 50%;
@@ -188,7 +184,7 @@
             transform: translate(-50%, -50%);
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(0, 174, 239, 0.3);
             border-radius: 20px;
             padding: 40px 30px;
             text-align: center;
@@ -199,7 +195,7 @@
         }
         
         .game-over h2 {
-            color: #333;
+            color: #003087;
             margin-bottom: 20px;
             font-size: 32px;
             font-weight: 900;
@@ -207,7 +203,7 @@
         
         .final-stats {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             margin: 25px 0;
             gap: 20px;
         }
@@ -220,21 +216,21 @@
         .stat-value {
             font-size: 28px;
             font-weight: 900;
-            color: #667eea;
+            color: #00AEEF;
             display: block;
             margin-bottom: 5px;
         }
         
         .stat-label {
             font-size: 14px;
-            color: #666;
+            color: #003087;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
         
         .play-again-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #003087 0%, #00AEEF 100%);
+            color: #FFFFFF;
             border: none;
             border-radius: 25px;
             padding: 15px 30px;
@@ -243,15 +239,14 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 20px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 48, 135, 0.4);
         }
         
         .play-again-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            box-shadow: 0 6px 20px rgba(0, 48, 135, 0.6);
         }
         
-        /* Адаптивность */
         @media (max-width: 768px) {
             .score-panel {
                 top: 10px;
@@ -322,7 +317,6 @@
             }
         }
         
-        /* Анимации */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -343,7 +337,6 @@
         <canvas id="gameCanvas" width="400" height="600"></canvas>
         
         <div class="ui-overlay">
-            <!-- Панель счета -->
             <div class="score-panel ui-element">
                 <div class="score-item">
                     <span class="score-label">Очки:</span>
@@ -355,7 +348,6 @@
                 </div>
             </div>
             
-            <!-- Панель управления -->
             <div class="control-panel ui-element">
                 <button class="control-btn gyro-toggle" id="gyroToggle">
                     🔄 Гироскоп: ВЫКЛ
@@ -365,13 +357,11 @@
                 </button>
             </div>
             
-            <!-- Мобильные кнопки управления -->
             <div class="mobile-controls ui-element" id="mobileControls">
                 <button class="direction-btn" id="leftBtn">←</button>
                 <button class="direction-btn" id="rightBtn">→</button>
             </div>
             
-            <!-- Экран окончания игры -->
             <div class="game-over ui-element" id="gameOverScreen">
                 <h2>🎮 Игра окончена!</h2>
                 
@@ -394,11 +384,9 @@
     </div>
 
     <script>
-        // Получаем canvas и контекст
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Адаптация под размер экрана
         function resizeCanvas() {
             const maxWidth = Math.min(window.innerWidth * 0.9, 400);
             const maxHeight = Math.min(window.innerHeight * 0.9, 600);
@@ -410,7 +398,6 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Игровые переменные
         let gameState = 'loading';
         let score = 0;
         let maxHeight = 0;
@@ -418,7 +405,6 @@
         let gyroEnabled = false;
         let gyroPermissionGranted = false;
 
-        // Загрузка ассетов
         const assets = {
             player: new Image(),
             platform: new Image(),
@@ -428,34 +414,47 @@
             total: 4
         };
 
-        // Загружаем изображения
+        let particles = [];
+        let jumpParticles = [];
+
+        const audio = {
+            ambient: new Audio('ambient.mp3'),
+            jump: new Audio('jump.mp3'),
+            collect: new Audio('collect.mp3'),
+            gameOver: new Audio('gameover.mp3')
+        };
+
         function loadAssets() {
             assets.player.onload = () => checkAssetsLoaded();
             assets.platform.onload = () => checkAssetsLoaded();
             assets.collectible.onload = () => checkAssetsLoaded();
             assets.background.onload = () => checkAssetsLoaded();
-            //assets.player.src = "data:image/png;base64,HuqY+8mHA7DG/Vzjqyjm2iLvz9EfvwMiGKrdtPePEMVRWzDjNQfhOJECR/ebzCIjujcdOwzayIXU5sjwvZsu+3Vbc9x0b/4HmYdybrkzU1+rip/+MwjCi828szoVNMe4WdMcsR7ai0D89HGBOgZqmmvQdnKCEzpj13QG9QKeXhSIlH5Hd7h2k1rEhhXQJTsuAE9uu8SdBIIyE52RD87XxDDm6xrXqIGJV8qwbMFUv4+BJjTumVSomkcKpitZKWcmTXgTqDt3g+c5yoBCq2SmFJ+GQSYfFEmNB6F4jWg63JwfygL3UuHGexc3BkHfAdzEaen1bj/ACELriOiDJ1IKUccoR/LTmk6bl4mUXjMuSPdz/3hKGoyzqnVmx8Dl/RgifvpXJieESWw9Y8WEzJnSZ1dK9bC+fwp2dpGod7mh4r+6MmfnYbLgHsVdNOhSEsM3WyfoIGRFdSKf1aMStlPXAQIE/AyP+8Up18Tibfstvb8hIMVT1IETu69x5jHaAKUA5TIfXmncGGkkCX/Wqb/2xg1LRoOcgcnHuPXSkbUVSPwinHulcH9gEZKextyzdzYLLm2/yoIsQRBo82W5Qdrpw8HjFhWw7ZmOtuRdmesW1Jw/vt9VOMcjGMC3JZE0fJgfZerCfOLbUn5ZpdUfb0Zoi7TVLlPiAGXTo9r1xYHRVn8iV/eKRlBkFtaCVoDOLnPIYU5LYOnBhjBeVmW0+pgb+P7qdr5ALmTlIAH77z1jWRssFXmRi1DUay6Pod7CVBaZISRScVxzXNkKnQXwDjjYO+P7yg/iBOsPrTynjHbH+zfViDoGrhX6w8mf+ckcHE+AzJ6ZEk3uzVBHkXwBEP+PXCVs+6kWPApdb2/e4eeARQXxyYAt+TtIKTqy+Axt491hkBo3mybSjCWD5N07wKUVHQEcOtSzj+W4ls/QIjg8a3Om507UfVv9TFEwm9ZdcCC5PfvFF8lM4vcj2xH7k0gV0rZtjRy2V8v4RvSdbJJQ6zCAmBWykXJKmQGwlRjRzLk8amDdrCtSbOMP/otQx7s0ZkQ9rPgJO0B9Rd7nRJJ+cVTDaRhj7YDgcyISMXeJetmQiXkG4ziheTIpMMqCGnbX+HjFbuDDbEUvWopqZYgochK/WkvaPCpbpWxMdvKGsX/mozxJhomNuMPvpvs02j+r0mOAMLdT7ODe8/WWj3gOsUa5djGouoF/1H1RhBBNHmOwPvXyJgqvt1kGd8TUC2CYV0Sanir6GhBVHXqQor/DwHIiwVuTExTX9G0pWbNc+N7SwKLof/xBznPcqltFPf8fjM201dOOFEunbUqRd/5zAzVqzERNS9IGf0Q9QRIKtu/zEpK4GG37Ya3omrCMbNJ2O9c1bi0vToVRtjMKv0JEm0NQymzs+Isg2A9gNA2us4oLaCxD0n52DfHzlqI54KbIMhCdhCxc27jFeHxF3ufv+Qd2PKLrijjaNamnbVfUjPgZW+qTKYd5fvBC2VqbJC3wpf489GZVBJI7w7nbnul2/JiR+8mK0e+lwumG0igUT3COgzs5CqQh9NUMNytPs3GiELHUvK+hMUEd8qk2+0UVDjRdX9tD6eMP8fqpahEBTbCFWO/8lOWk/Njf77oMB4y2LZC/ODfbbNX1SnW4PunjEkoz5fkGTIQ/Rqp7118W8initk3E8xmzNgj9OOdT9z9ZrOxGTt+AB/UJfvXG03P/fRm+Ad/UqlyuLYxImGQyofERX6h6Pd6/cXxNcktE6/e2G9t3JBOEayWLpXLFdxzr31qkiDDRqGaHYjdSquqwGTWhYNZL41JMw4l9T9BkjZNdytZpsrzN5D/AnMhtj+V5T/BugMql181H5x+dMvb++BMng5AjvdKyX7SOP0T8FnILBBvAB5D31pSfQwAw+hcmJ4ND8hIFeal5g3o4aKG4WEewHOlOSio1XCmVB+BXSQOg55heCrB6BVKgyHWy5zo0td9/7QDvzAo952yr4jssAfl3X03A3mCrNRwtJhkXexkZ0+4yA6eGAjaA2RhmQiqXCo2mXypJpNIhmuKTENhWSo+1M/bUaoICLJAlHcxrjv8rCsLY5TiLQOD9EPSY6nIzey8yQLUOaNlEzDztxmdNUh6pcu3KoNHMfC533nBjcYM2U/20gF3MpyzwD3TjFWlOc5tmVzw7x7kuKJM/Cuf88qQC2Nlh36ZqWFjYZm9A+nDXVKXznDC0T3O/ofnKz7z/KyYnE51AfppVmzB1YJ+RUb6ARZdgoFanSz8fpy25wPk2y/ligAKgoM6LwAz8wFYU0vlEvkZy2oCrL4l1T9tr3cqFaJyLc4htgRjR6VSlfO/+T23i7TXP6n8U9xzIX/CeXSdH3JOlK3FAfn93I+LGlQIFsvolIv+/b5kQDpNGe/8t7UFnSy1CZ+UGMsf6kFunhVxfxDxNHrA3nTLjZlel77NympVba/9kgf1qku01TvYDLWDA/pSK+UhOJ0ce4K7b1JumACzpL4QodLuhh7IwP7Ro2X4TSKpP3FdmTNpX3KcO4xaBc/blRC89W81TnReMO6tlIZ2PRsVw+GgzOXmGim9BbubPLcaccT1uIRvFkRvFjSQNwEKgYXagfsH6VoEnyMtwN6mm6n/tK7YlNcCGBArpaacMcA1we/JM1YENiQorRDKaKhWfGeyoL2+U1zk0RkHpsl7eIAcjoABlemFNIh9lEv1wT9ywV2sBU7bWDJGJdVx8FElfbRP0CbT3Pmb8ixV988MkrP6PYDYpGDPxVRUSvEBmZytVEyG9rtUe/iYjpR9zfqrJ2D63cqBL8JfTLMQ9DgA7Tn2G8gMSyhyktx6dCH36Ns5p1e36l9j15/cJ5TxFiMU4M+fd9+HY/tRHKoIMpjssAf+8G6R+xujxfNd8IAzy5Jm1IfzL2+duQrhQdZWAOWV70eQ6shBZq1IGbvO0zlhh7LtJT5+gbOu1GerEW0mi/dLAJM5VsX5DmrGbB9hr/FDt8SKsyLLDiHEbaViYWC+uls1x5USLb0a5PasEbWSqR3sej8HrkSGacEJ/h01VQB/1u9xwDY93r4wkT+TmHtTIakH/aAEvxLEq4x1+/ViT7Al9qQkz3KS3036afkIicdvbtVRO9uceCF7iF67hcmIOcEbIQqDn6XMUkkSriA2hkDn8rlGMM3/52ZOdNPYPIMAd0hzuXov7QcfPvQkM1eZe4F8XimDFuPvJ3arwc9c4YKdOyvnpcynCFOwDRl+f1FJRub8ytnvmJhXSRm8ZendDLqNr3bOiYqBidzMLZ0zqm5atn1PGVboO+X54lo4zUuQ+xJbs/K7AxdT0TBa+12pXqh4Cp+9W4T4fuy1CyHBO0oCBvtWLd3DvKReZ2jymTMZqvMSZ4JPhX0yIRicexfOFXbtKxNOQ4tA5hYULVBJck8SnNikCe5ANrf6FHyoThyrbbP5ccMQGxn0ZzmxiUkljs/2Q3b/KXjVOjoxoMTAv+mNtJj4/8773ui2sGm0FNRAwiuYjLtUYjSY+jA0JRvoZDfiMJrSheaiPM/kw/Nwf/QwioNK9uTKAalL4vVAHuWLU8nLUip0pZTRVgzo7qoOZn8HJIK5WxtL2kYfA38p4K31x3qqCpO3wAoZSzCogFlYHRTE08iZKupa+Z1FsBVJQ3aYF708Z8qf30TTi4FEUDrDG0qT7Mh977pr5dKGsEBpXJbPd6wpyflFb1YBLaCleYpHcPwYMr63YEqVUjgL/U25HNP5t3eWs/R33zVuJbNkNXGygAbTmPotZbPzws6ghM5xAMoJNO6MPtblvYezMoPhEDa/d2M0ciQgZu6/F6R0x5nx5A0lHgmEnTa5kwWpQ/XI6qGkj0AG53s9/IPIjrsZMisuD3K1g91fzfVObwxGr0Fkn3MCRJxTzGLOzKW87wwawLMtMDyKKCGrn3vqzv3jaMt/Vzx/1RveYjoi4IKgKU6K+3awZ2DlbKkkAMNtryu83MmtyEIctDVY44EwcVi+zYAubhHZXYCEHFf9IxgjG9TOOmWXuJPaPw6OQMvPcVxWGJ1ma8KQnSzNBgc+JfrnY7O6JCb5bvCilxXzex6lwiIKm4BTAL7ITMosN4vxhy36GYLz5pMW4GZWTrNGJtkbhTz7cUJF5izZ50qtJKD0Ks7M7ybevOrnTOpH3ypgURhqZFKloST5VO0APpc8uCXCK0itA25viqz/+B5OrgISQsJEfYwulKqlOM6QulWi6gHBIwgfyITJbkDKuv8IClEIywLZIx/rpWKpV87spHsBoj/vEXV+0FkizGXXyByZ6vDgjslnVeOHzafyCJ2OjavY9JCifs5bV6ov17oymdaVbQ2bn/st30/vORNyDWElLKn/3pY7mWE1Qx9DbGgUktxBYALv59/maH8/YyozP2PbCyF2TkM2/hBhQQ0BuTXx6TA+JAdSyfoL/ty2ZPzRrBYtsmOeRv23FSHuW7V9S0WTQs4aGSqEHFqmFwyW+swOMs5ArYtsuO/Ww1X11WZFfdAGeZmTs7AIGZrzMqGZD2PTAJ5rn9+BtBzuf1J1VwIrUYY/pR/G2FqdDGDUstDzVLtdiKPghkr2tiAd5gdYQwy1yWiV+5MP7Fz/WEkl+EQXPRyYih4yxl3LiVg/MvcgMsarzP6e8gfGGlNg1EjSPDJCWhJpibB8dgVkP3Fv+V72Glpya0Kr2ytF1awzhcAN6eFvv/jUYL15+DB2i7PNsGMlaAcrbFCPHttF/WSAVTsPvP5zofUDp6jUWbK+8WF8bGwGVTYUoilbJdyzD84hGP1kfHL0hjVqEjRnzOx1W4fuqzjZjBWzmeQhvQ7wa/FrXiPv2LkD7Iix6bf95Emzp4pHnB9pxNWnh7FjS/iuZuJR+8+Craf9/IczCmkpQVJOcJqBGJZbkud2vETDeMOaRPuUv+feYXYaOXy+b7jnWySFZpQNEvFJXSY4rU7DaxE43x+qvnjOp4L4KlynYoQE9g6BkKpXqfp7vlCyrai00PmZVcxQCoYpaXSdQJliMHyeyWX2AQVFhbcHLDddZy1vSxmtiOHTaqvsAiisg+usA6om+gshloB9SvdcWi6KZ/X9lso2ML7yPF/rWDLmzD4k/j1kUQqA/BiZpHX3L/1ofGfuBRt+waYbm8gVI21wrwemkl3Kf2Ps0h5asvBMStQLw09JRBi27KG1A/RLZ/+snabBoNesXh7Iq71SGt9VrxQWx5qSjUn9GGUruZCUjnrS4VHd0RXTn3s08+ne5jlQdOzX0HLQny8mpUff9TC8AMRZw16b8crAmwH0pQIq1xScnwy9VxqiLfdz0AfITHxesENmIumRHZRiwr2+3hjdB9SsArHUWuOn65jYtttVF5NzvGKdSi2Ya4Q2MdiMVN+lPzVkRGkYChWJd9m832/0oSxNEC8yE3bwM0kLuKJiKJeKpxnKcVN1KZW+D2M1yJ+kzCyYbx4IXwUcSiE5mUW7iN8GPfTmRBtxHM/5JhAZDLVsnG6IM1c8bH+R6pU5RXcAbr8OMOuD/N5mxQ28nXNx+TgVF4NhWNn4cLTIIuCidMMzvMBwxLledDw/G6MHE1ogE961kL+7ZE25FPrlC/2kqUgODdQQZvV0bCivTJDg738ZmIAnK18qj3562I01fpxvSnhhxnkfTxS2HHkVY+9zVFLFQxAj7IN8rsl2qh6bX79o4czu0I7Yd1muo7vqBBwmCcMe37TyKCMh7+rXQ+mxne7wX/+YsjzIjkVsFNGEsT8NmK/0PPK7t/S3zi3nCMmg3ozQAL59I5+DbjORT2bGBmWHQVYh/6C+Ogt+bb95hhmJCpR4veKF7Qg5UKNvy1tkFOGIvKjKtje+CtuVYWTbZ5hnvKUMAIvczISocc76s/hKkG+Z3ZIsWIZabqli+kqR9amgIXzi3JX5Jehy80OW5L6KKJveR'
+            
             assets.player.src = 'player.png';
-            //assets.player.src = '';
-            //assets.player.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAYAAAB/HSuDAADldmNhQlgAAOV2anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAANxNqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOmIzZDk2YzA5LWE3NjAtNDE1NS1hNmRiLTMwMjZmNDE2ZDI2NgAAAAHh..."
             assets.platform.src = 'platform_upscaled_330x210.png';  
             assets.collectible.src = 'collectible_upscaled_330x210.png';
             assets.background.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==';
+
+            audio.ambient.loop = true;
+            audio.ambient.volume = 0.3;
+            audio.jump.volume = 0.5;
+            audio.collect.volume = 0.6;
+            audio.gameOver.volume = 0.7;
         }
 
         function checkAssetsLoaded() {
             assets.loaded++;
             if (assets.loaded === assets.total) {
                 gameState = 'playing';
+                audio.ambient.play().catch(error => console.log('Автозапуск звука заблокирован:', error));
                 console.log('Все ассеты загружены!');
             }
         }
 
-        // Игрок
         const player = {
-            x: canvas.width / 3,
-            y: canvas.height - 120,
-            width: 70,
+            x: canvas.width / 2 - 35,
+            y: canvas.height - 200,
+            width: 50,
             height: 100,
             velocityX: 0,
             velocityY: 0,
@@ -463,37 +462,35 @@
             color: '#FF6B6B'
         };
 
-        // Массивы объектов
         let platforms = [];
         let collectibles = [];
 
-        // Константы игры
-        const GRAVITY = 0.3;
-        const JUMP_FORCE = -12;
+        const GRAVITY = 0.25;
+        const JUMP_FORCE = -11;
         const PLAYER_SPEED = 5;
-        const PLATFORM_WIDTH = 130;
+        const PLATFORM_WIDTH = 80;
         const PLATFORM_HEIGHT = 100;
 
-        // Типы платформ
         const PLATFORM_TYPES = {
             NORMAL: 'normal',
             TEMPORARY: 'temporary',
             MOVING: 'moving'
         };
 
-        // Переменные для управления кнопками
         let leftPressed = false;
         let rightPressed = false;
 
-        // Инициализация платформ
         function initializePlatforms() {
-            platforms = [];
+            platforms = [];  
+            collectibles = []; 
             
             platforms.push({
                 x: canvas.width / 2 - PLATFORM_WIDTH / 2,
-                y: canvas.height - 80,
+                y: canvas.height - 120,
                 width: PLATFORM_WIDTH,
                 height: PLATFORM_HEIGHT,
+                collisionWidth: 60,
+                collisionHeight: 20,
                 type: PLATFORM_TYPES.NORMAL,
                 color: '#4CAF50',
                 used: false
@@ -502,9 +499,11 @@
             for (let i = 1; i < 20; i++) {
                 platforms.push({
                     x: Math.random() * (canvas.width - PLATFORM_WIDTH),
-                    y: canvas.height - 80 - (i * 250),
+                    y: canvas.height - 120 - (i * 180),
                     width: PLATFORM_WIDTH,
                     height: PLATFORM_HEIGHT,
+                    collisionWidth: 60,
+                    collisionHeight: 20,
                     type: PLATFORM_TYPES.NORMAL,
                     color: '#4CAF50',
                     used: false,
@@ -513,10 +512,10 @@
                 
                 if (Math.random() < 0.3) {
                     collectibles.push({
-                        x: platforms[platforms.length - 1].x + PLATFORM_WIDTH / 2 - 20,
+                        x: platforms[platforms.length - 1].x + PLATFORM_WIDTH / 2 - 25,
                         y: platforms[platforms.length - 1].y - 60,
-                        width: 110,
-                        height: 90,
+                        width: 70,
+                        height: 70,
                         color: '#FFD700',
                         collected: false
                     });
@@ -524,7 +523,6 @@
             }
         }
 
-        // Генерация платформы на определённой высоте
         function generatePlatform(y) {
             const height = Math.abs(cameraY - y);
             let type = PLATFORM_TYPES.NORMAL;
@@ -544,6 +542,8 @@
                 y: y,
                 width: PLATFORM_WIDTH,
                 height: PLATFORM_HEIGHT,
+                collisionWidth: 60,
+                collisionHeight: 20,
                 type: type,
                 used: false,
                 moveSpeed: type === PLATFORM_TYPES.MOVING ? (Math.random() * 2 + 1) * (Math.random() < 0.5 ? 1 : -1) : 0
@@ -553,7 +553,7 @@
 
             if (Math.random() < 0.3) {
                 collectibles.push({
-                    x: platform.x + platform.width / 2 - 10,
+                    x: platform.x + platform.width / 2 - 25,
                     y: platform.y - 30,
                     width: 50,
                     height: 60,
@@ -562,7 +562,6 @@
             }
         }
 
-        // Обработка гироскопа
         function requestGyroPermission() {
             if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
                 DeviceMotionEvent.requestPermission()
@@ -602,15 +601,12 @@
             
             const gamma = event.gamma;
             if (gamma !== null) {
-                const sensitivity = 0.4; // Уменьшена чувствительность
+                const sensitivity = 0.4;
                 const targetVelocityX = gamma * sensitivity;
                 
-                // Плавное изменение скорости вместо прямого присваивания
                 const smoothing = 0.15;
                 player.velocityX += (targetVelocityX - player.velocityX) * smoothing;
                 
-                
-                // Мертвая зона для стабилизации
                 if (Math.abs(gamma) < 3) {
                     player.velocityX *= 0.95;
                 }
@@ -637,7 +633,6 @@
             }
         }
 
-        // Обработчики кнопок
         document.getElementById('gyroToggle').addEventListener('click', function() {
             if (gyroEnabled) {
                 disableGyroscope();
@@ -650,7 +645,6 @@
             }
         });
 
-        // Мобильные кнопки управления
         const leftBtn = document.getElementById('leftBtn');
         const rightBtn = document.getElementById('rightBtn');
 
@@ -674,13 +668,11 @@
             rightPressed = false;
         });
 
-        // Поддержка мыши для кнопок
         leftBtn.addEventListener('mousedown', () => leftPressed = true);
         leftBtn.addEventListener('mouseup', () => leftPressed = false);
         rightBtn.addEventListener('mousedown', () => rightPressed = true);
         rightBtn.addEventListener('mouseup', () => rightPressed = false);
 
-        // Управление клавиатурой
         const keys = {};
         
         window.addEventListener('keydown', (e) => {
@@ -691,15 +683,12 @@
             keys[e.key] = false;
         });
 
-        // Инициализация отображения мобильных кнопок
         updateMobileControls();
         window.addEventListener('resize', updateMobileControls);
 
-        // Обновление игры
         function update() {
             if (gameState !== 'playing') return;
 
-            // Управление
             if (!gyroEnabled) {
                 if (keys['ArrowLeft'] || keys['a'] || keys['A'] || leftPressed) {
                     player.velocityX = -PLAYER_SPEED;
@@ -710,19 +699,16 @@
                 }
             }
 
-            // Физика игрока
             player.velocityY += GRAVITY;
             player.x += player.velocityX;
             player.y += player.velocityY;
 
-            // Границы экрана по горизонтали
             if (player.x < 0) {
                 player.x = canvas.width;
             } else if (player.x > canvas.width) {
                 player.x = 0;
             }
 
-            // Обновление движущихся платформ
             platforms.forEach(platform => {
                 if (platform.type === PLATFORM_TYPES.MOVING) {
                     platform.x += platform.moveSpeed;
@@ -733,18 +719,33 @@
                 }
             });
 
-            // Проверка столкновения с платформами
             player.onGround = false;
             platforms.forEach(platform => {
-                if (player.velocityY > 0 &&
-                    player.x < platform.x + platform.width &&
+                const platformTop = platform.y - cameraY;
+                const platformBottom = platformTop + platform.collisionHeight;
+                if (platformBottom > 0 && platformTop < canvas.height &&
+                    player.velocityY > 0 &&
+                    player.x < platform.x + platform.collisionWidth &&
                     player.x + player.width > platform.x &&
                     player.y + player.height > platform.y &&
-                    player.y + player.height < platform.y + platform.height + 10) {
-                    
+                    player.y + player.height < platform.y + platform.collisionHeight + 10) {
                     player.y = platform.y - player.height;
                     player.velocityY = JUMP_FORCE;
                     player.onGround = true;
+
+                    for (let i = 0; i < 15; i++) {
+                        jumpParticles.push({
+                            x: player.x + Math.random() * player.width,
+                            y: player.y + player.height,
+                            size: Math.random() * 5 + 2,
+                            speedX: (Math.random() - 0.5) * 3,
+                            speedY: (Math.random() - 0.5) * 3,
+                            life: 20,
+                            color: '#D3D3D3'
+                        });
+                    }
+                    audio.jump.currentTime = 0;
+                    audio.jump.play().catch(error => console.log('Ошибка воспроизведения звука прыжка:', error));
 
                     if (platform.type === PLATFORM_TYPES.TEMPORARY && !platform.used) {
                         platform.used = true;
@@ -758,7 +759,6 @@
                 }
             });
 
-            // Проверка сбора предметов
             collectibles.forEach(collectible => {
                 if (!collectible.collected &&
                     player.x < collectible.x + collectible.width &&
@@ -768,16 +768,41 @@
                     
                     collectible.collected = true;
                     score += 50;
+                    for (let i = 0; i < 20; i++) {
+                        particles.push({
+                            x: collectible.x + collectible.width / 2,
+                            y: collectible.y + collectible.height / 2,
+                            size: Math.random() * 5 + 2,
+                            speedX: (Math.random() - 0.5) * 5,
+                            speedY: (Math.random() - 0.5) * 5,
+                            life: 30,
+                            color: `hsl(${Math.random() * 360}, 70%, 60%)`
+                        });
+                    }
+                    audio.collect.currentTime = 0;
+                    audio.collect.play().catch(error => console.log('Ошибка воспроизведения звука сбора:', error));
                 }
             });
 
-            // Обновление камеры
+            particles = particles.filter(p => p.life > 0);
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.life--;
+            });
+
+            jumpParticles = jumpParticles.filter(p => p.life > 0);
+            jumpParticles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                p.life--;
+            });
+
             const targetCameraY = player.y - canvas.height / 3;
             if (targetCameraY < cameraY) {
                 cameraY = targetCameraY;
             }
 
-            // Обновление максимальной высоты и счёта
             const currentHeight = Math.abs(Math.min(player.y - (canvas.height - 120), 0));
             if (currentHeight > maxHeight) {
                 const heightDiff = currentHeight - maxHeight;
@@ -785,7 +810,6 @@
                 score += Math.floor(heightDiff / 10);
             }
 
-            // Генерация новых платформ
             let needNewPlatforms = false;
             
             if (platforms.length === 0) {
@@ -803,34 +827,31 @@
                     cameraY - 170;
                     
                 for (let i = 0; i < 8; i++) {
-                    generatePlatform(startY - (i * 250));
+                    generatePlatform(startY - (i * 180));
                 }
             }
 
-            // Удаление платформ и предметов
             const cleanupThreshold = cameraY + canvas.height + 400;
             platforms = platforms.filter(platform => platform.y < cleanupThreshold);
             collectibles = collectibles.filter(collectible => 
                 !collectible.collected && collectible.y < cleanupThreshold
             );
 
-            // Проверка окончания игры
-            if (player.y > cameraY + canvas.height + 100) {
+            const playerBottom = player.y + player.height - cameraY;
+            if (playerBottom >= canvas.height) {
                 gameState = 'gameOver';
                 showGameOver();
             }
 
-            // Обновление UI
             document.getElementById('scoreValue').textContent = score;
             document.getElementById('heightValue').textContent = Math.floor(maxHeight / 10) + 'м';
         }
 
-        // Рендеринг
         function render() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             if (gameState === 'loading') {
-                ctx.fillStyle = '#333';
+                ctx.fillStyle = '#003087';
                 ctx.font = '24px Arial';
                 ctx.textAlign = 'center';
                 ctx.fillText('Загрузка ассетов...', canvas.width / 2, canvas.height / 2);
@@ -841,26 +862,43 @@
             ctx.save();
             ctx.translate(0, -cameraY);
 
-            // Рендеринг платформ
             platforms.forEach(platform => {
+                if (platform.type === PLATFORM_TYPES.TEMPORARY && !assets.platform.complete) {
+                    const alpha = Math.sin(Date.now() / 200 + platform.x) * 0.5 + 0.5;
+                    ctx.globalAlpha = alpha;
+                }
                 if (assets.platform.complete && assets.platform.naturalWidth > 1) {
                     ctx.drawImage(assets.platform, platform.x, platform.y, platform.width, platform.height);
                 } else {
-                    // Улучшенный fallback для платформ
-                    ctx.fillStyle = '#4CAF50';
+                    ctx.fillStyle = platform.color;
                     ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
                     ctx.fillStyle = '#388E3C';
                     ctx.fillRect(platform.x, platform.y, platform.width, 8);
                 }
+                if (platform.type === PLATFORM_TYPES.TEMPORARY && !assets.platform.complete) {
+                    ctx.globalAlpha = 1;
+                }
             });
 
-            // Рендеринг предметов для сбора
+            jumpParticles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            particles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
             collectibles.forEach(collectible => {
                 if (!collectible.collected) {
                     if (assets.collectible.complete && assets.collectible.naturalWidth > 1) {
                         ctx.drawImage(assets.collectible, collectible.x, collectible.y, collectible.width, collectible.height);
                     } else {
-                        // Улучшенный предмет - звездочка
                         ctx.fillStyle = '#FFD700';
                         ctx.beginPath();
                         const cx = collectible.x + collectible.width / 2;
@@ -883,15 +921,12 @@
                 }
             });
 
-            // Рендеринг игрока
             if (assets.player.complete && assets.player.naturalWidth > 1) {
                 ctx.drawImage(assets.player, player.x, player.y, player.width, player.height);
             } else {
-                // Улучшенный fallback игрока - персонаж с лицом
                 ctx.fillStyle = player.color;
                 ctx.fillRect(player.x, player.y, player.width, player.height);
                 
-                // Лицо
                 ctx.fillStyle = 'white';
                 ctx.fillRect(player.x + 10, player.y + 10, 12, 12);
                 ctx.fillRect(player.x + 38, player.y + 10, 12, 12);
@@ -899,7 +934,6 @@
                 ctx.fillRect(player.x + 14, player.y + 14, 4, 4);
                 ctx.fillRect(player.x + 42, player.y + 14, 4, 4);
                 
-                // Улыбка
                 ctx.fillStyle = 'black';
                 ctx.fillRect(player.x + 20, player.y + 35, 20, 3);
                 ctx.fillRect(player.x + 18, player.y + 32, 3, 3);
@@ -909,51 +943,45 @@
             ctx.restore();
         }
 
-        // Показать экран окончания игры
         function showGameOver() {
             document.getElementById('finalScore').textContent = score;
             document.getElementById('finalHeight').textContent = Math.floor(maxHeight / 10) + 'м';
             document.getElementById('gameOverScreen').style.display = 'block';
+            audio.ambient.pause();
+            audio.gameOver.currentTime = 0;
+            audio.gameOver.play().catch(error => console.log('Ошибка воспроизведения звука проигрыша:', error));
         }
 
-        // Перезапуск игры
         function restartGame() {
             gameState = 'playing';
             score = 0;
             maxHeight = 0;
             cameraY = 0;
+            particles = [];
+            jumpParticles = [];
             
-            // Сброс игрока
-            player.x = canvas.width / 2;
-            player.y = canvas.height - 120;
-            player.velocityX = 0;
-            player.velocityY = 0;
-            player.onGround = false;
-
-            // Очистка массивов
-            platforms = [];
-            collectibles = [];
-            
-            // Переинициализация платформ
             initializePlatforms();
             
-            // Скрытие экрана окончания игры
+            player.x = canvas.width / 2 - 35;
+            player.y = platforms[0].y - player.height;
+            player.velocityX = 0;
+            player.velocityY = 0;
+            player.onGround = true;
+
             document.getElementById('gameOverScreen').style.display = 'none';
+            audio.ambient.play().catch(error => console.log('Ошибка возобновления звука ambient:', error));
         }
 
-        // Основной игровой цикл
         function gameLoop() {
             update();
             render();
             requestAnimationFrame(gameLoop);
         }
 
-        // Инициализация игры
         loadAssets();
         initializePlatforms();
         gameLoop();
 
-        // Обработка касаний для мобильных устройств
         let touchStartX = 0;
         let touchStartY = 0;
         
@@ -983,7 +1011,6 @@
             }
         });
 
-        // Предотвращение потери фокуса кнопок при отпускании
         document.addEventListener('mouseup', () => {
             leftPressed = false;
             rightPressed = false;
